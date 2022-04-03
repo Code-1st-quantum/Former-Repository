@@ -15,6 +15,10 @@ Syntax highlighted code block
 ## Header 2
 ### Header 3
 
+- George Washington
+- John Adams
+- Thomas Jefferson
+
 - Bulleted
 - List
 
@@ -24,6 +28,14 @@ Syntax highlighted code block
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
+
+```
+
+
+#### 模板
+
+
+```markdown
 Trie树 模板/洛谷 P2580
 #include<iostream>
 #include<string>
