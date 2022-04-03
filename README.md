@@ -35,3 +35,56 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 ### Support or Contact
 
 Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+
+Trie树 模板/洛谷 P2580
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+int n,trie[10000005][30],node=0,f[10000005],m;
+void build_tree(){
+	for(int i=1;i<=n;i++){
+		char s[55];
+		int root=0;
+		cin>>s;
+		int len=strlen(s);
+		for(int j=0;j<len;j++){
+			int c=s[j]-'a';
+			if(!trie[root][c]) trie[root][c]=++node;
+			root=trie[root][c];
+		}
+		f[root]++;
+	}
+}
+void search(){
+	for(int i=1;i<=m;i++){
+		char s[55];
+		cin>>s;
+		int root=0,len=strlen(s);
+		for(int j=0;j<len;j++){
+			int c=s[j]-'a';
+			if(!trie[root][c]){
+				printf("WRONG\n");
+				break;
+			}
+			root=trie[root][c];
+			if(j==len-1&&f[root]==1){
+				f[root]++;
+				printf("OK\n");
+				break;
+			}if(j==len-1&&f[root]>1){
+				printf("REPEAT\n");
+				f[root]++;
+				break;
+			}
+		}
+	} 
+}
+int main(){
+	scanf("%d",&n);
+	build_tree(); 
+	scanf("%d",&m);
+	search();
+	return 0;
+}
