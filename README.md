@@ -37,6 +37,7 @@ Syntax highlighted code block
 ### 数据结构
 
 #### Trie树 模板 / 洛谷 P2580
+ [洛谷 P2580 于是他错误的点名开始了](https://www.luogu.com.cn/problem/P2580)
 ```markdown
 #include<iostream>
 #include<string>
