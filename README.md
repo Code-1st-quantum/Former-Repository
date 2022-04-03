@@ -30,11 +30,11 @@ Syntax highlighted code block
 [Link](url) and ![Image](src)
 
 ```
+# C++ Part
 
+## 模板
 
-#### 模板
-
-
+### 数据结构
 ```markdown
 Trie树 模板/洛谷 P2580
 #include<iostream>
