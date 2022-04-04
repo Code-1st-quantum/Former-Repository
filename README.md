@@ -135,18 +135,18 @@ w[i]表示 Trie 上节点 i 和其父节点间的边被几个维护的数字经�
 			vxor[y]^=(vxor[tr[y][1]]<<1)|(w[tr[y][1]]&1); // &1 是判断奇偶性 
 		}
 	}
-	void erase(int y,int o,int dp){
+	void erase(int y,int o,int dp){   //删除某些权值操作
 		if(dp>20) return (void)w[y]--;
 		erase(tr[y][o&1],o>>1,dp+1); // o&1 是判断该位该往哪边走，o>>1 则是进位 
 		maintain(y);
 	}
-	void insert(int &y,int o,int dp){
+	void insert(int &y,int o,int dp){  //插入新权值
 		if(!y) y=setnode();
 		if(dp>20) return (void)w[y]++;
 		insert(tr[y][o&1],o>>1,dp+1);  //进位建立更深的 Trie 节点 
 		maintain(y); //不要忘记重新维护子树异或和 
 	}
-	void xorsum(int x){
+	void xorsum(int x){   //全局加一操作
 		swap(tr[x][1],tr[x][0]);
 		if(tr[x][0]) xorsum(tr[x][0]);
 		maintain(x); //重新求一下子树和异或 
