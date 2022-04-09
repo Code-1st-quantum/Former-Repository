@@ -219,7 +219,7 @@ int main(){
 
 #### 小根二叉堆 模板
  [洛谷 P3378 【模板】堆](https://www.luogu.com.cn/problem/P3378)
-```markdown
+```c++
 #include<iostream>
 #include<cstdio>
 using namespace std;
