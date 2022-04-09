@@ -95,7 +95,7 @@ int main(){
 
 #### 01 Trie 模板
  [洛谷 P6018 [Ynoi2010] Fusion tree](https://www.luogu.com.cn/problem/P6018)
-```
+```markdown
 #include<algorithm>
 #include<cstdio>
 #include<cstring>
@@ -212,6 +212,53 @@ int main(){
 			ans^=newans(fa[x]);
 			printf("%d\n",ans);
 		}
+	}
+	return 0;
+}
+```
+
+#### 小根二叉堆 模板
+ [洛谷 P3378 【模板】堆](https://www.luogu.com.cn/problem/P3378)
+```markdown
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int n,tot=0,heap[1000005];
+void insert(int x){
+	heap[++tot]=x;
+	int p=tot;
+	while(p>1){
+		if(heap[p]<heap[p/2]){
+			swap(heap[p],heap[p/2]);
+			p=p/2;
+		}else break;
+	}
+}
+void erase(){
+	swap(heap[1],heap[tot--]);
+	int p=1;
+	while(true){
+		int lson=p*2,rson=p*2+1;
+		int minn=heap[p],k;
+		if(lson<=tot&&heap[lson]<minn) minn=heap[lson],k=lson;
+		if(rson<=tot&&heap[rson]<minn) minn=heap[rson],k=rson;
+		if(minn==heap[p]) break;
+		swap(heap[p],heap[k]);
+		p=k;
+	}
+}
+int main(){
+	scanf("%d",&n);
+	while(n--){
+		int op;
+		scanf("%d",&op);
+		if(op==1){
+			int x;
+			scanf("%d",&x);
+			insert(x);
+		}
+		else if(op==2) printf("%d\n",heap[1]);
+		else erase();
 	}
 	return 0;
 }
