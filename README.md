@@ -38,7 +38,7 @@ Syntax highlighted code block
 
 #### Trie树 模板
  [洛谷 P2580 于是他错误的点名开始了](https://www.luogu.com.cn/problem/P2580)
-```markdown
+```c++
 #include<iostream>
 #include<string>
 #include<cstring>
@@ -95,7 +95,7 @@ int main(){
 
 #### 01 Trie 模板
  [洛谷 P6018 [Ynoi2010] Fusion tree](https://www.luogu.com.cn/problem/P6018)
-```markdown
+```c++
 #include<algorithm>
 #include<cstdio>
 #include<cstring>
@@ -264,6 +264,32 @@ int main(){
 }
 ```
 
+#### RMQ问题之ST表 模板
+ [洛谷 P3865 【模板】ST 表](https://www.luogu.com.cn/problem/P3865)
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath> 
+using namespace std;
+int n,m,f[100005][22];
+int query(int l,int r){
+	int k=log2(r-l+1);
+	return max(f[l][k],f[r-(1<<k)+1][k]);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++) scanf("%d",&f[i][0]);
+	for(int k=1;k<=21;k++)
+	  for(int i=1;i+(1<<k)-1<=n;i++)
+	    f[i][k]=max(f[i][k-1],f[i+(1<<(k-1))][k-1]);
+	for(int i=1;i<=m;i++){
+		int l,r;
+		scanf("%d%d",&l,&r);
+		printf("%d\n",query(l,r));
+	}
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
