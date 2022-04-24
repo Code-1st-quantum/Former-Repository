@@ -364,6 +364,36 @@ int main(){
 	return 0;
 }
 ```
+
+#### 中国剩余定理（CRT）
+ [洛谷 P1495 【模板】中国剩余定理(CRT)/曹冲养猪](https://www.luogu.com.cn/problem/P1495)
+```cpp
+#include<cstdio>
+#include<cmath>
+typedef long long ll;
+using namespace std;
+int n;
+ll a[100005],m[100005],Ms=1,M[100005],t[100005],ans;
+ll exgcd(ll a,ll b,ll &x,ll &y){
+	if(b==0){x=1,y=0; return a;}
+	ll d=exgcd(b,a%b,x,y);
+	ll z=x; x=y; y=z-(a/b)*y;
+	return d;
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++) scanf("%lld%lld",&m[i],&a[i]),Ms*=m[i];
+	for(int i=1;i<=n;i++) M[i]=Ms/m[i];
+	for(int i=1;i<=n;i++){
+		ll x,y;
+		ll d=exgcd(M[i],m[i],x,y);
+		t[i]=((x%m[i]+m[i])%m[i]);
+		ans=(ans+t[i]*M[i]*a[i])%Ms;
+	}
+	printf("%lld",ans%Ms);
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
