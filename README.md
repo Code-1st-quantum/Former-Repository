@@ -293,7 +293,7 @@ int main(){
 
 ### 数论
 
-#### （素数）线性筛
+#### (素数)线性筛
  [洛谷 P3383 【模板】线性筛素数](https://www.luogu.com.cn/problem/P3383)
  ```cpp
  #include<cstdio>
@@ -320,7 +320,7 @@ int main(){
 }
 ```
 
-#### 扩展欧拉定理（a ^ b % c 问题，b 为极大数）
+#### 扩展欧拉定理(a ^ b % c 问题，b 为极大数)
 
  [洛谷 P5091 【模板】扩展欧拉定理](https://www.luogu.com.cn/problem/P5091)
 ```cpp
@@ -365,7 +365,7 @@ int main(){
 }
 ```
 
-#### 中国剩余定理（CRT）
+#### 中国剩余定理(CRT)
  [洛谷 P1495 【模板】中国剩余定理(CRT)/曹冲养猪](https://www.luogu.com.cn/problem/P1495)
 ```cpp
 #include<cstdio>
@@ -395,7 +395,7 @@ int main(){
 }
 ```
 
-#### 扩展中国剩余定理（EXCRT）
+#### 扩展中国剩余定理(EXCRT)
  [洛谷 P4777 【模板】扩展中国剩余定理（EXCRT）](https://www.luogu.com.cn/problem/P4777)
  ```cpp
  #include<cstdio>
@@ -433,7 +433,7 @@ int main(){
 }
  ```
  
-#### 扩展欧几里得算法及其通解
+#### 扩展欧几里得算法及其通解(EXGCD)
  [洛谷 P5656 【模板】二元一次不定方程 (exgcd)）](https://www.luogu.com.cn/problem/P5656)
  ```cpp
  #include<cstdio>
@@ -474,7 +474,7 @@ int main(){
 }
  ```
  
-#### 乘法逆元变形：ax≡1(mod b)
+#### 乘法逆元变形：ax≡1(mod b)求极解
 [洛谷 P1082 [NOIP2012 提高组] 同余方程](https://www.luogu.com.cn/problem/P1082)
 ```cpp
 #include<cstdio>
@@ -493,6 +493,25 @@ int main(){
 	d=exgcd(a,b,x,y);
 	printf("%lld",((x%(b/d)+(b/d))%(b/d)));
 	return 0;
+}
+```
+
+#### 线性求乘法逆元
+[洛谷 P3811 【模板】乘法逆元](https://www.luogu.com.cn/problem/P3811)
+```cpp
+#include<cstdio>
+typedef long long ll;
+using namespace std;
+ll n,p,inv[3000005];
+int main(){
+	scanf("%lld%lld",&n,&p);
+	inv[1]=1;
+	printf("1\n");
+	for(int i=2;i<=n;i++){
+	    inv[i]=(p-(p/i))*(inv[p%i])%p;
+	    printf("%lld\n",inv[i]);
+    }
+    return 0;
 }
 ```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
