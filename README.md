@@ -432,6 +432,47 @@ int main(){
 	return 0;
 }
  ```
+ 
+#### 扩展欧几里得算法及其通解
+ [洛谷 P5656 【模板】二元一次不定方程 (exgcd)）](https://www.luogu.com.cn/problem/P5656)
+ ```cpp
+ #include<cstdio>
+#include<iostream> 
+#include<cmath>
+typedef long long ll;
+using namespace std;
+int t;
+ll exgcd(ll a,ll b,ll &x,ll &y){
+	if(b==0){x=1,y=0; return a;}
+	ll n=exgcd(b,a%b,x,y);
+	ll z=x; x=y; y=z-(a/b)*y;
+	return n; 
+}
+int main(){
+	scanf("%d",&t);
+	while(t--){
+		ll a,b,c,d,x,y;
+		scanf("%lld%lld%lld",&a,&b,&c);
+		d=exgcd(a,b,x,y);
+		if(c%d!=0){ printf("-1\n"); continue;}
+		ll x1=(x*c)/d; ll y1=(y*c)/d;
+		ll dx=b/d; ll dy=a/d;
+		ll s1=ceil((1.0-x1)/dx);
+		x1+=s1*dx,y1-=s1*dy;
+		if(y1<=0){
+			ll y2=y1+dy*1ll*ceil((1.0-y1)/dy);
+			printf("%lld %lld\n",x1,y2);
+			continue;
+		} 
+		printf("%lld ",(y1-1)/dy+1);
+		printf("%lld ",x1);
+		printf("%lld ",(y1-1)%dy+1);
+		printf("%lld ",(y1-1)/dy*dx+x1);
+		printf("%lld\n",y1);
+	}
+	return 0;
+}
+ ```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
