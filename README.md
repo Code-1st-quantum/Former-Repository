@@ -514,6 +514,58 @@ int main(){
     return 0;
 }
 ```
+
+#### 线性筛求欧拉函数
+[洛谷 P4139 上帝与集合的正确用法](https://www.luogu.com.cn/problem/P4139)
+```cpp
+#include<cstdio>
+#include<iostream>
+typedef long long ll;
+using namespace std;
+const ll MAXN=1e7+5;
+ll phi[MAXN],prime[MAXN],cnt=0;
+bool vis[MAXN]={false};
+ll t,p;
+void prephi(){  //线性筛求欧拉函数
+	phi[1]=1;
+	for(int i=2;i<=MAXN;i++){
+		if(!vis[i]){
+			phi[i]=i-1;
+			prime[++cnt]=i;
+		}
+		for(int j=1;j<=cnt&&i*prime[j]<=MAXN;j++){
+			vis[i*prime[j]]=true;
+			if(i%prime[j]) phi[i*prime[j]]=(prime[j]-1)*phi[i];
+			else{
+				phi[i*prime[j]]=phi[i]*prime[j];
+				break;
+			}
+		}
+	}
+}
+ll quickpow(ll a,ll k,ll mod){
+	ll res=1;
+	while(k){
+		if(k&1) res=(res*a)%mod;
+		a=(a*a)%mod;
+		k>>=1;
+	}
+	return res;
+}
+ll exEuler(ll mod){
+	if(mod==1) return 0;
+	return quickpow(2,exEuler(phi[mod])+phi[mod],mod);
+}
+int main(){
+	prephi();
+	scanf("%lld",&t);
+	while(t--){
+		scanf("%lld",&p);
+		printf("%lld\n",exEuler(p));
+	}
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
