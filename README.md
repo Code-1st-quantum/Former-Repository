@@ -394,6 +394,44 @@ int main(){
 	return 0;
 }
 ```
+
+#### 扩展中国剩余定理（EXCRT）
+ [洛谷 P4777 【模板】扩展中国剩余定理（EXCRT）](https://www.luogu.com.cn/problem/P4777)
+ ```cpp
+ #include<cstdio>
+#include<iostream> 
+#include<cmath>
+typedef __int128 ll;
+using namespace std;
+int n;
+long long r[100005],m[100005];
+ll exgcd(ll a,ll b,ll &x,ll &y){
+	if(b==0){x=1,y=0; return a;}
+	ll d=exgcd(b,a%b,x,y);
+	ll z=x; x=y; y=z-(a/b)*y;
+	return d;
+}
+ll exCRT(){
+	ll m1=m[1],r1=r[1];
+	for(int i=2;i<=n;i++){
+		ll m2=m[i],r2=r[i];
+		ll delta=r2-r1;
+	    ll x,y,gcd;
+	    gcd=exgcd(m1,m2,x,y);
+	    ll mod=m2/gcd;
+	    x=((x*delta/gcd)%mod+mod)%mod;
+	    r1=r1+x*m1;
+	    m1=(m1*m2)/gcd;
+	}
+	return r1;
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++) cin>>m[i]>>r[i];
+	cout<<(long long)(exCRT());
+	return 0;
+}
+ ```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
