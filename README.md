@@ -473,6 +473,28 @@ int main(){
 	return 0;
 }
  ```
+ 
+#### 乘法逆元变形：ax≡1(mod b)
+[洛谷 P1082 [NOIP2012 提高组] 同余方程](https://www.luogu.com.cn/problem/P1082)
+```cpp
+#include<cstdio>
+#include<cmath>
+typedef long long ll;
+using namespace std;
+ll exgcd(ll a,ll b,ll &x,ll &y){
+	if(b==0){x=1,y=0; return a;}
+	ll m=exgcd(b,a%b,x,y);
+	ll z=x; x=y; y=z-(a/b)*y;
+	return m;
+}
+int main(){
+	ll a,b,x,y,d;
+	scanf("%lld%lld",&a,&b);
+	d=exgcd(a,b,x,y);
+	printf("%lld",((x%(b/d)+(b/d))%(b/d)));
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
