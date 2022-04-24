@@ -319,6 +319,51 @@ int main(){
 	return 0;
 }
 ```
+
+#### 扩展欧拉定理（a ^ b % c 问题，b 为极大数）
+
+ [洛谷 P5091 【模板】扩展欧拉定理](https://www.luogu.com.cn/problem/P5091)
+```cpp
+#include<cstdio>
+#include<string>
+#include<cmath>
+typedef long long ll;
+using namespace std;
+ll n,m,ans,m2;
+ll read(ll mod){
+	ll f=0,x=0; char c=getchar();
+	while(!(c>='0'&&c<='9')) c=getchar();
+	while(c>='0'&&c<='9'){
+		x=x*10+c-'0';
+		if(x>=mod) f=1;
+		x%=mod; 
+		c=getchar();
+	}
+	return x+(f?mod:0);
+}
+ll quickpow(ll a,ll b,ll c){
+	int res=1;
+	while(b){
+		if(b&1) res=res*a%c;
+		a=a*a%c;
+		b>>=1;
+	}
+	return res;
+}
+int main(){
+	scanf("%lld%lld",&n,&m);
+	ans=m,m2=m;
+	for(int i=2;i<=sqrt(m);i++)
+	  if(m%i==0){
+		ans-=ans/i;
+		while(m%i==0) m/=i;
+	  }
+	if(m>1) ans-=ans/m;
+	ll b=read(ans); 
+	printf("%lld",quickpow(n,b,m2));
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
