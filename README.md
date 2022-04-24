@@ -290,6 +290,35 @@ int main(){
 	return 0;
 }
 ```
+
+### 数论
+
+#### （素数）线性筛
+ [洛谷 P3383 【模板】线性筛素数](https://www.luogu.com.cn/problem/P3383)
+ ```cpp
+ #include<cstdio>
+using namespace std;
+bool vis[100000005];
+int n,q,k,prime[100000005],cnt=0;
+void linear_prime(){
+	for(int i=2;i<=n;i++){
+		if(!vis[i]) prime[++cnt]=i;
+		for(int j=1;j<=cnt&&i*prime[j]<=n;j++){
+			vis[i*prime[j]]=true;
+			if(i%prime[j]==0) break;
+		}
+	}
+}
+int main(){
+	scanf("%d%d",&n,&q);
+	linear_prime();
+	while(q--){
+		scanf("%d",&k);
+		printf("%d\n",prime[k]);
+	}
+	return 0;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
