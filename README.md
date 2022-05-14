@@ -290,6 +290,7 @@ int main(){
 	return 0;
 }
 ```
+
 #### 线段树 RMQ 方式求 LCA
  [洛谷 P3379 【模板】最近公共祖先（LCA）](https://www.luogu.com.cn/problem/P3379)
  ```c++
@@ -356,6 +357,47 @@ int main(){
 	return 0;
 }
  ```
+ 
+#### 线段树之单点修改区间询问
+```c++
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int n,m,a[500005],v[2100005];
+void build(int x,int l,int r){
+	if(l==r){v[x]=a[l];return;}
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	v[x]=v[x<<1]+v[x<<1|1];
+}
+void modify(int x,int l,int r,int to,int k){
+	if(l==r){v[x]+=k;return;}
+	int mid=(l+r)>>1;
+	if(to<=mid) modify(x<<1,l,mid,to,k);
+	else modify(x<<1|1,mid+1,r,to,k);
+	v[x]=v[x<<1]+v[x<<1|1];
+}
+int query(int x,int l,int r,int ql,int qr){
+	if(l==ql&&r==qr) return v[x];
+	int mid=(l+r)>>1;
+	if(ql<=mid&&qr>mid) return query(x<<1,l,mid,ql,mid)+query(x<<1|1,mid+1,r,mid+1,qr);
+	else if(qr<=mid) return query(x<<1,l,mid,ql,qr);
+	else return query(x<<1|1,mid+1,r,ql,qr);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++) scanf("%d",&a[i]);
+	build(1,1,n);
+	while(m--){
+		int l,r,op;
+		scanf("%d%d%d",&op,&l,&r);
+		if(op==1) modify(1,1,n,l,r);
+		else printf("%d\n",query(1,1,n,l,r));
+	}
+	return 0;
+}
+```
 
 ### 数论
 
