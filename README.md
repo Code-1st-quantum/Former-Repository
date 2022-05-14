@@ -399,6 +399,70 @@ int main(){
 }
 ```
 
+#### 线段树之区间修改区间询问
+```c++
+#include<iostream>
+#include<cstdio>
+typedef long long ll;
+using namespace std;
+int n,m;
+ll a[100005],d[400005],v[400005];
+void build(int x,int l,int r){
+	if(l==r){v[x]=a[l];return;}
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	v[x]=v[x<<1]+v[x<<1|1];
+}
+void pushdown(int x,int l,int r,int mid){
+	if(!d[x]) return;
+	d[x<<1]+=d[x];
+	d[x<<1|1]+=d[x];
+	v[x<<1]+=d[x]*(mid-l+1);
+	v[x<<1|1]+=d[x]*(r-mid);
+	d[x]=0;
+}
+void modify(int x,int l,int r,int ql,int qr,ll k){
+	if(l==ql&&r==qr){d[x]+=k; v[x]+=k*(qr-ql+1);return;}
+	int mid=(l+r)>>1;
+	pushdown(x,l,r,mid);
+	if(ql<=mid&&qr>mid){
+		modify(x<<1,l,mid,ql,mid,k);
+		modify(x<<1|1,mid+1,r,mid+1,qr,k);
+	}else if(qr<=mid) modify(x<<1,l,mid,ql,qr,k);
+	else modify(x<<1|1,mid+1,r,ql,qr,k);
+	v[x]=v[x<<1]+v[x<<1|1];
+}
+ll query(int x,int l,int r,int ql,int qr){
+	if(l==ql&&r==qr){return v[x];}
+	int mid=(l+r)>>1;
+	pushdown(x,l,r,mid);
+	if(ql<=mid&&qr>mid)
+	  return query(x<<1,l,mid,ql,mid)+query(x<<1|1,mid+1,r,mid+1,qr);
+	else if(qr<=mid) return query(x<<1,l,mid,ql,qr);
+	else return query(x<<1|1,mid+1,r,ql,qr);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+	build(1,1,n);
+	while(m--){
+		int op;
+		scanf("%d",&op);
+		if(op==1){
+			ll x,y,k;
+			scanf("%lld%lld%lld",&x,&y,&k);
+			modify(1,1,n,x,y,k);
+		}else{
+			ll x,y;
+			scanf("%lld%lld",&x,&y);
+			printf("%lld\n",query(1,1,n,x,y));
+		}
+	}
+	return 0;
+}
+```
+
 ### 数论
 
 #### (素数)线性筛
