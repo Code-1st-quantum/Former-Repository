@@ -1,4 +1,4 @@
-## P1002 [NOIP2002 普及组] 过河卒（递推）
+## P1002 [NOIP2002 普及组] 过河卒(递推)
 
 **题目描述**
 
@@ -71,7 +71,7 @@ int main(){
 
 ```
 
-## P1003 [NOIP2011 提高组] 铺地毯（模拟）
+## P1003 [NOIP2011 提高组] 铺地毯(模拟)
 
 **题目描述**
 
@@ -174,7 +174,7 @@ int main(){
 }
 ```
 
-## [NOIP2011 提高组] 聪明的质监员
+## P1314 [NOIP2011 提高组] 聪明的质监员(前缀和，二分答案)
 
 **题目描述**
 
@@ -245,3 +245,38 @@ $$y_i=\sum\limits_{j=l_i}^{r_i}[w_j \ge W] \times \sum\limits_{j=l_i}^{r_i}[w_j 
 对于 $70\%$ 的数据，有 $1 ≤n ,m≤10,000$ ；
 
 对于 $100\%$ 的数据，有 $ 1 ≤n ,m≤200,000$，$0 < w_i,v_i≤10^6$，$0 < s≤10^{12}$，$1 ≤l_i ≤r_i ≤n$ 。
+```c++
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
+#define MAXN 200005
+using namespace std;
+typedef long long ll;
+ll n,m,s,w[MAXN],v[MAXN],l[MAXN],r[MAXN],sum1[MAXN],sum2[MAXN],ans=1e18,maxn=-1,minn=1e18,now;
+bool chck(ll x){
+	ll y=0;
+	for(int i=0;i<=max(m,n);i++) sum1[i]=sum2[i]=0;
+	for(int i=1;i<=n;i++)
+		if(w[i]>x) sum1[i]=sum1[i-1]+1,sum2[i]=sum2[i-1]+v[i];
+		else sum1[i]=sum1[i-1],sum2[i]=sum2[i-1];
+	for(int i=1;i<=m;i++) y+=(sum1[r[i]]-sum1[l[i]-1])*(sum2[r[i]]-sum2[l[i]-1]);
+	now=abs(y-s); //记录当前与 s 的差值 
+	if(y>s) return true; //如果 y>s ,则要将二分的 w 变大,从而调小 y ,使其更接近 s 
+	else return false;
+}
+int main(){
+	scanf("%lld%lld%lld",&n,&m,&s);
+	for(int i=1;i<=n;i++) scanf("%lld%lld",&w[i],&v[i]),maxn=max(maxn,w[i]),minn=min(minn,w[i]);
+	for(int i=1;i<=m;i++) scanf("%lld%lld",&l[i],&r[i]);
+	int l=minn-1,r=maxn+1;
+	while(l<=r){
+		int mid=(l+r)>>1;
+		if(chck(mid)) l=mid+1;
+		else r=mid-1; 
+		if(now<ans) ans=now; //将差值最小化 
+	}
+	printf("%lld",ans);
+	return 0;
+}
+```
