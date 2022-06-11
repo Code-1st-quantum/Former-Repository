@@ -280,7 +280,7 @@ int main(){
 	return 0;
 }
 ```
-## P3718 [AHOI2017初中组]alter
+## P3718 [AHOI2017初中组]alter(二分答案)
 
 **题目背景**
 
