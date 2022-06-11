@@ -40,6 +40,36 @@
 
 NOIP 2002 普及组第四题
 
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+int cotx[22]={0,1,2,2,1,-1,-2,-2,-1},coty[22]={0,2,1,-1,-2,-2,-1,1,2};
+long long n,m,hx,hy;
+int hc[22][22]={0};
+long long mapp[22][22]={0};
+int main(){
+	cin>>n>>m>>hx>>hy;
+	for(int i=1;i<=9;i++){
+		int cx=hx+cotx[i];
+		int cy=hy+coty[i];
+		if(cx>=0&&cx<=n&&cy>=0&&cy<=m) hc[cx][cy]=1;
+	}
+	if(hc[0][0]==1){
+      cout<<0;
+      return 0;
+	}mapp[0][0]=1;
+	for(int i=0;i<=n;i++){
+		for(int j=0;j<=m;j++){
+			if(hc[i][j]==1) continue;
+			if(i!=0) mapp[i][j]+=mapp[i-1][j];
+			if(j!=0) mapp[i][j]+=mapp[i][j-1];
+		}
+	}
+	cout<<mapp[n][m];
+	return 0;
+}
+
+```
 
 ## P1004 [NOIP2011 提高组] 铺地毯
 
@@ -114,3 +144,32 @@ NOIP 2002 普及组第四题
 对于 $100\%$ 的数据，有 $0 \le n \le 10^4$, $0 \le a, b, g, k \le {10}^5$。   
 
 noip2011 提高组 day1 第 $1$ 题。
+```c++
+#include<iostream>
+using namespace std;
+struct node{
+	int a,b,c,d;
+}s[10005];
+int t,x,y,ans;
+bool flag=false;
+int main(){
+	ios::sync_with_stdio(false);
+	cin>>t;
+	for(int i=1;i<=t;i++){
+	    cin>>s[i].a>>s[i].b>>s[i].c>>s[i].d;	
+	}
+	cin>>x>>y;
+	for(int i=1;i<=t;i++){
+		if(x>=s[i].a&&x<=s[i].a+s[i].c-1&&y>=s[i].b&&y<=s[i].b+s[i].d-1){
+			ans=i;
+			flag=true;
+		}
+	}
+	if(flag){
+		cout<<ans<<endl;
+		return 0;
+	}
+	cout<<-1<<endl;
+	return 0;
+}
+```
