@@ -381,6 +381,91 @@ int main(){
 	return 0;
 }
 ```
+# P1902 刺杀大使
+
+**题目描述**
+
+某组织正在策划一起对某大使的刺杀行动。他们来到了使馆，准备完成此次刺杀，要进入使馆首先必须通过使馆前的防御迷阵。
+
+迷阵由 $n\times m$ 个相同的小房间组成，每个房间与相邻四个房间之间有门可通行。在第 $n$ 行的 $m$ 个房间里有 $m$ 个机关，这些机关必须全部打开才可以进入大使馆。而第 $1$ 行的 $m$ 个房间有 $m$ 扇向外打开的门，是迷阵的入口。除了第 $1$ 行和第 $n$ 行的房间外，每个房间都被使馆的安保人员安装了激光杀伤装置，将会对进入房间的人造成一定的伤害。第 $i$ 行第 $j$ 列 造成的伤害值为 $p_{i,j}$（第 $1$ 行和第 $n$ 行的 $p$ 值全部为 $0$）。
+
+现在某组织打算以最小伤害代价进入迷阵，打开全部机关，显然，他们可以选 择任意多的人从任意的门进入，但必须到达第 $n$ 行的每个房间。一个士兵受到的伤害值为他到达某个机关的路径上所有房间的伤害值中的最大值，整个部队受到的伤害值为所有士兵的伤害值中的最大值。现在，这个恐怖组织掌握了迷阵的情况，他们需要提前知道怎么安排士兵的行进路线可以使得整个部队的伤害值最小。
+
+**输入格式**
+
+第一行有两个整数 $n,m$，表示迷阵的大小。
+
+接下来 $n$ 行，每行 $m$ 个数，第 $i$ 行第 $j$ 列的数表示 $p_{i,j}$。
+
+**输出格式**
+
+输出一个数，表示最小伤害代价。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+4 2
+0 0 
+3 5 
+2 4 
+0 0
+```
+
+**样例输出 #1**
+
+```
+3
+```
+
+**提示**
+
+- $50\%$ 的数据，$n,m \leq 100$；
+- $100\%$ 的数据，$n,m \leq 1000$，$p_{i,j} \leq 1000$。
+```c++
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+#include<utility>
+using namespace std;
+int m,n,map[1005][1005],l=1e9,r=-1e9,ans=1e9;
+bool vis[1005][1005]={false};
+int dx[4]={1,0,-1,0};
+int dy[4]={0,-1,0,1};
+bool chck(int k){
+	queue<pair<int,int> >q;
+	memset(vis,false,sizeof vis);
+	q.push(make_pair(1,1));
+	vis[1][1]=true;
+	while(!q.empty()){
+		int x=q.front().first,y=q.front().second; 
+		q.pop();
+		for(int i=0;i<4;i++){
+			int xx=x+dx[i],yy=y+dy[i];
+			if(!(xx<=n&&yy<=m&&xx>=1&&yy>=1&&map[xx][yy]<=k&&!vis[xx][yy])) continue;
+			vis[xx][yy]=true;
+			q.push(make_pair(xx,yy));
+			if(xx==n) return true;
+		}
+	}
+	return false;
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++)
+	  for(int j=1;j<=m;j++)
+	    scanf("%d",&map[i][j]),l=min(l,map[i][j]),r=max(r,map[i][j]);
+	while(l<=r){
+		int mid=(l+r)>>1;
+		if(chck(mid)) ans=min(ans,mid),r=mid-1;
+		else l=mid+1;
+	}
+	printf("%d",ans);
+	return 0;
+}
+```
 
 ## P3718 [AHOI2017初中组]alter(二分答案)
 
