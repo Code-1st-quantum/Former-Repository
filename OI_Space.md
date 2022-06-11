@@ -708,5 +708,29 @@ int main(){
 	return 0;
 }
 ```
+### 其他
+#### 龟速乘
+若模数>1e9时，快速幂会爆掉，要使用龟速乘
+```c++
+typedef long long ll;
+ll quick_mul(ll a,ll b,ll mod){
+	ll ans=0;
+	while(b){
+		if(b&1) ans=ans+a,ans%=mod;
+		a=a+a,a%=mod;
+		b>>=1;
+	}
+	return ans;
+}
+ll quick_pow(ll a,ll b,ll mod){
+	ll res=q;
+	while(b){
+		if(b&1) res=quick_mul(res,a,mod),res%=mod;  //这里相当于原来快速幂的 res*a%mod ，只不过把 res*a 换成了 res+res+res...(a 个 res)
+		a=(a,a,mod),a%=mod;
+		b=b>>1;
+	}
+	return res;
+}
+```
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
