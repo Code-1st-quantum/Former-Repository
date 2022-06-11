@@ -280,6 +280,87 @@ int main(){
 	return 0;
 }
 ```
+## P3718 [AHOI2017初中组]alter
+
+**题目背景**
+
+以下为不影响题意的简化版题目。
+
+**题目描述**
+
+有N盏灯排成一列，其中有些灯开着，有些灯关着。小可可希望灯是错落有致的，他定义一列灯的状态的不优美度为这些灯中最长的连续的开着或关着的灯的个数。小可可最多可以按开关k次，每次操作可以使该盏灯的状态取反：原来开着的就关着，反之开着。现在给出这些灯的状态，求操作后最小的不优美度。
+
+**输入格式**
+
+第一行两个整数n,k
+
+第二行是一个长度为n的字符串，其中有两种字符：N和F。其中N表示该灯开着，F表示该灯关着
+
+**输出格式**
+
+最小的不优美度
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+8 1
+NNNFFNNN
+```
+
+**样例输出 #1**
+
+```
+3
+```
+
+**提示**
+
+30%的数据：1 ≤ K ≤ N ≤ 20；
+
+50%的数据：1 ≤ K ≤ N ≤ 300；
+
+另有15%的数据：1 ≤ N ≤ 100000，字符串为全N或全F；
+
+100%的数据：1 ≤ K ≤ N ≤ 100000。
+
+```c++
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n,k,cnt=0,s1=0,s2=0,a[100005]={0},ans=1e9;
+//a[i] 表示原 str 序列里第 i 组连续的字母内的连续的字母数目 
+//cnt 表示一共有多少组连续字母 
+char str[100005];
+bool chck(int x){
+	int ans=0;
+	for(int i=1;i<=cnt;i++) ans+=a[i]/(x+1);
+	if(ans<=k) return true;
+	else return false;
+}
+int main(){
+	scanf("%d%d",&n,&k);
+	scanf("%s",str+1);
+	for(int i=1;i<=n;i++) if((i%2==0&&str[i]=='N')||(i%2==1&&str[i]=='F')) s1++;
+	for(int i=1;i<=n;i++) if((i%2==1&&str[i]=='N')||(i%2==0&&str[i]=='F')) s2++;
+	if(s1<=k||s2<=k){printf("%d",1); return 0;}
+	//以上特判表示在 k 步以内可以将序列变为不优美度为 1 的序列 
+	for(int i=1;i<=n;i++){
+		a[++cnt]++;
+		while(str[i]==str[i+1]){a[cnt]++;i++;}
+	}
+	int l=2,r=n; //left 端点是 2 ,因为 1的情况上面已经特判过了 
+	while(l<=r){
+		int mid=(l+r)>>1;
+		if(chck(mid)) r=mid-1,ans=min(ans,mid);
+		else l=mid+1;
+	}
+	printf("%d",ans);
+	return 0;
+} 
+```
+
 ## P3853 [TJOI2007]路标设置(二分答案)
 
 **题目背景**
