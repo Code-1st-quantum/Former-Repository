@@ -4,9 +4,9 @@
 
 ## 模板 Templates
 
-### 数据结构
+### 数据结构 Data Structures
 
-#### Trie树 模板
+#### 字典树 Trie
  [洛谷 P2580 于是他错误的点名开始了](https://www.luogu.com.cn/problem/P2580)
 ```c++
 #include<iostream>
@@ -63,7 +63,7 @@ int main(){
 
 ```
 
-#### 01 Trie 模板
+#### 01 Trie
  [洛谷 P6018 [Ynoi2010] Fusion tree](https://www.luogu.com.cn/problem/P6018)
 ```c++
 #include<algorithm>
@@ -187,7 +187,7 @@ int main(){
 }
 ```
 
-#### 小根二叉堆 模板
+#### 小根二叉堆 Binary Heap with the Small Root
  [洛谷 P3378 【模板】堆](https://www.luogu.com.cn/problem/P3378)
 ```c++
 #include<iostream>
@@ -234,7 +234,7 @@ int main(){
 }
 ```
 
-#### RMQ 问题之 ST 表 模板
+#### RMQ 问题之 ST 表 Sparse Table of Range Minimum/Maximum Queries
  [洛谷 P3865 【模板】ST 表](https://www.luogu.com.cn/problem/P3865)
 ```c++
 #include<iostream>
@@ -261,7 +261,7 @@ int main(){
 }
 ```
 
-#### 线段树 RMQ 方式求 LCA
+#### 线段树 RMQ 方式求 LCA  Getting Lowest Common Ancestor by Using Segment Tree on RMQ
  [洛谷 P3379 【模板】最近公共祖先（LCA）](https://www.luogu.com.cn/problem/P3379)
  ```c++
  #include<iostream>
