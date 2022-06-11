@@ -234,7 +234,7 @@ int main(){
 }
 ```
 
-#### RMQ 问题之 ST 表 Sparse Table of Range Minimum/Maximum Queries
+#### RMQ 问题之 ST 表 Sparse Table of Range Minimum/Maximum Queries 
  [洛谷 P3865 【模板】ST 表](https://www.luogu.com.cn/problem/P3865)
 ```c++
 #include<iostream>
@@ -328,7 +328,7 @@ int main(){
 }
  ```
  
-#### 线段树之单点修改区间询问
+#### 线段树之单点修改区间查询 Segment Tree (Modify on Points and Inquiry on Sections) 
 ```c++
 #include<iostream>
 #include<cstdio>
@@ -369,7 +369,7 @@ int main(){
 }
 ```
 
-#### 线段树之区间修改区间询问
+#### 线段树之区间修改区间查询 Segment Tree (Both Modify and Inquiry on Sections) 
 ```c++
 #include<iostream>
 #include<cstdio>
@@ -433,9 +433,9 @@ int main(){
 }
 ```
 
-### 数论
+### 数论 Number Theory
 
-#### (素数)线性筛
+#### (素数)线性筛 Linear Sieve Method
  [洛谷 P3383 【模板】线性筛素数](https://www.luogu.com.cn/problem/P3383)
  ```cpp
  #include<cstdio>
@@ -462,7 +462,7 @@ int main(){
 }
 ```
 
-#### 扩展欧拉定理(a ^ b % c 问题，b 为极大数)
+#### 扩展欧拉定理(a ^ b % c 问题，b 为极大数) Extended Euler Theorem
 
  [洛谷 P5091 【模板】扩展欧拉定理](https://www.luogu.com.cn/problem/P5091)
 ```cpp
@@ -507,7 +507,7 @@ int main(){
 }
 ```
 
-#### 中国剩余定理(CRT)
+#### 中国剩余定理 Chinese Remainder Rheorem CRT
  [洛谷 P1495 【模板】中国剩余定理(CRT)/曹冲养猪](https://www.luogu.com.cn/problem/P1495)
 ```cpp
 #include<cstdio>
@@ -537,7 +537,7 @@ int main(){
 }
 ```
 
-#### 扩展中国剩余定理(EXCRT)
+#### 扩展中国剩余定理 Extended Chinese Remainder Theorem
  [洛谷 P4777 【模板】扩展中国剩余定理（EXCRT）](https://www.luogu.com.cn/problem/P4777)
  ```cpp
  #include<cstdio>
@@ -575,7 +575,7 @@ int main(){
 }
  ```
  
-#### 扩展欧几里得算法及其通解(EXGCD)
+#### 扩展欧几里得算法及其通解 Extended Euclidean Algorithm
  [洛谷 P5656 【模板】二元一次不定方程 (exgcd)）](https://www.luogu.com.cn/problem/P5656)
  ```cpp
  #include<cstdio>
@@ -616,7 +616,7 @@ int main(){
 }
  ```
  
-#### 乘法逆元变形：ax≡1(mod b)求极解
+#### 线性同余方程 Linear Congruent Equation
 [洛谷 P1082 [NOIP2012 提高组] 同余方程](https://www.luogu.com.cn/problem/P1082)
 ```cpp
 #include<cstdio>
@@ -638,7 +638,7 @@ int main(){
 }
 ```
 
-#### 线性求乘法逆元
+#### 线性求乘法逆元 Linear Multiplicative Inverse
 [洛谷 P3811 【模板】乘法逆元](https://www.luogu.com.cn/problem/P3811)
 ```cpp
 #include<cstdio>
@@ -657,7 +657,7 @@ int main(){
 }
 ```
 
-#### 线性筛求欧拉函数
+#### 线性筛求欧拉函数 Getting Euler Function By Sieve Method
 [洛谷 P4139 上帝与集合的正确用法](https://www.luogu.com.cn/problem/P4139)
 ```cpp
 #include<cstdio>
