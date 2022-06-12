@@ -1176,7 +1176,7 @@ int main(){
 对于 $ 70\%$ 的数据： $1 \le n \le 8$，$0 \le m \le 10^3$，$v \le  5\times 10^3$。
 
 对于 $ 100\%$ 的数据： $1 \le n \le 12$，$0 \le m \le 10^3$，$v \le  5\times 10^5$。
-···c++
+```c++
 #include<cstdio>
 #include<algorithm>
 #include<cstring>
@@ -1225,6 +1225,7 @@ int main(){
 }
 ```
 ---
+	
 ## P4408 [NOI2003] 逃学的小孩(树的直径/贪心)
 
 **题目描述**
