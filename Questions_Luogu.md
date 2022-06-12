@@ -1321,3 +1321,119 @@ int main(){
 	return 0;
 }
 ```
+---
+## P5005 中国象棋 - 摆上马
+
+**题目背景**
+
+Imakf 玩腻了国际象棋，决定玩一玩中国象棋。
+
+他发现中国象棋的马和国际象棋的马有所不同，他意识到这又可以出一道简单的问题，于是他又准备摆一摆马了
+
+**题目描述**
+
+Imakf 有一个 $X$ 行 $Y$ 列的棋盘，还有很多**完全相同**的马（你可以认为有无数个）。现在在棋盘上摆上马（或者不摆），求任何马无法攻击另一匹马的方案总数。
+
+中国象棋的马和国际象棋的马不同。
+
+![](https://cdn.luogu.com.cn/upload/pic/40761.png)
+
+注意：实际问题中是没有兵的。
+
+当然由于方案可能过多，请输出对 $(10^9+7)$ 取模的值
+
+**输入格式**
+
+第一行两个正整数 $X,Y$。
+
+**输出格式**
+
+方案对 $(10^9+7)$ 取模的值。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+1 1
+```
+
+**样例输出 #1**
+
+```
+2
+```
+
+**样例 #2**
+
+**样例输入 #2**
+
+```
+3 3
+```
+
+**样例输出 #2**
+
+```
+145
+```
+
+**提示**
+
+对于 100% 的数据，有 $1\le X\leq100$，$1\le Y\leq6$。
+
+对于 20% 的数据，有 $X,Y\leq6$。
+
+对于另外 20% 的数据，有 $X\leq20$。
+
+对于样例 1，可以选择不摆或者摆。
+
+对于样例 2，我有一个绝妙的解释可惜我写不下。
+```c++
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+const int mod=1e9+7;
+const int N=1<<7;
+int n,m,dp[3][N][N],ans=0;
+bool chck1(int k1,int k2,int t){
+	int s=~((k1&(k1>>1))>>1),k;
+	k=s&k2;
+	if((k1>>2)&k) return false;
+	s=~((k1&(k1<<1))<<1);k=s&k2;
+	if((k1<<2)&k) return false;
+	if(t) return true;
+	else return true&&chck1(k2,k1,t+1);
+}
+bool chck2(int k1,int k2,int k3,int t){
+	int s=~((k1&k2)>>1),k;
+	k=s&k3;
+	if((k1>>1)&k) return false;
+	s=~((k1&k2)<<1),k=s&k3;
+	if((k1<<1)&k) return false;
+	if(t) return true;
+	else return true&&chck2(k3,k2,k1,t+1);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	int maxn=(1<<m)-1;
+	for(int i=0;i<=maxn;i++) dp[1][i][0]=1;
+	for(int i=0;i<=maxn;i++)
+	  for(int j=0;j<=maxn;j++)
+	    if(chck1(i,j,0)) dp[2][i][j]=1;
+	for(int i=3;i<=n;i++){
+	  memset(dp[i%3],0,sizeof dp[i%3]);
+	  for(int j=0;j<=maxn;j++)
+	    for(int k=0;k<=maxn;k++) if(chck1(j,k,0))
+	      for(int s=0;s<=maxn;s++)
+	        if(chck1(k,s,0)&&chck2(j,k,s,0))
+	          dp[i%3][j][k]=(dp[i%3][j][k]+dp[(i-1)%3][k][s])%mod;
+    }
+    for(int i=0;i<=maxn;i++)
+      for(int j=0;j<=maxn;j++) if(chck1(i,j,0))
+        ans=(ans+dp[n%3][i][j])%mod;
+    printf("%d",ans);
+    return 0;
+}
+```
