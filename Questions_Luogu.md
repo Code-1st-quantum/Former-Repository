@@ -470,6 +470,105 @@ int main(){
 }
 ```
 ---
+## P3554 [POI2013]LUK-Triumphal arch(二分答案/树形DP)
+
+**题目描述**
+
+The king of Byteotia, Byteasar, is returning to his country after a victorious battle.
+
+In Byteotia, there are ![](http://main.edu.pl/images/OI20/luk-en-tex.1.png) towns connected with only ![](http://main.edu.pl/images/OI20/luk-en-tex.2.png) roads.
+
+It is known that every town can be reached from every other town by a unique route,    consisting of one or more (direct) roads.
+
+    (In other words, the road network forms a tree).
+
+The king has just entered the capital.
+
+Therein a triumphal arch, i.e., a gate a victorious king rides through, has been erected.
+
+Byteasar, delighted by a warm welcome by his subjects, has planned a    triumphal procession to visit all the towns of Byteotia, starting with the capital he is currently in.
+
+The other towns are not ready to greet their king just yet -    the constructions of the triumphal arches in those towns did not even begin!
+
+But Byteasar's trusted advisor is seeing to the issue.
+
+    He desires to hire a number of construction crews.
+
+    Every crew can construct a single arch each day, in any town.
+
+    Unfortunately, no one knows the order in which the king will visit the towns.
+
+The only thing that is clear is that every day the king will travel from the city he is currently in to a neighboring one.
+
+The king may visit any town an arbitrary number of times    (but as he is not vain, one arch in each town will suffice).
+
+Byteasar's advisor has to pay each crew the same flat fee, regardless of how many arches this crew builds.
+
+Thus, while he needs to ensure that every town has an arch when it is visited by the king, he wants to hire as few crews as possible.
+
+Help him out by writing a program that will determine the minimum number    of crews that allow a timely delivery of the arches.
+
+
+给一颗 $n$ 个节点的树（$n \le 3 \times 10^5$），初始时 $1$ 号节点被染黑，其余是白的。两个人轮流操作，一开始 B 在 $1$ 号节点。每一轮，A 选择 $k$ 个点染黑，然后 B 走到一个相邻节点，如果 B 当前处于白点则 B 胜，否则当 A 将所有点染为黑点时 A 胜。求能让 A 获胜的最小的 $k$ 。
+
+**输入格式**
+
+The first line of the standard input contains a single integer ![](http://main.edu.pl/images/OI20/luk-en-tex.3.png)    (![](http://main.edu.pl/images/OI20/luk-en-tex.4.png)), the number of towns in Byteotia.
+
+The towns are numbered from 1 to ![](http://main.edu.pl/images/OI20/luk-en-tex.5.png), where the number 1 corresponds to the capital.
+
+The road network is described in ![](http://main.edu.pl/images/OI20/luk-en-tex.6.png) lines that then follow.
+
+Each of those lines contains two integers, ![](http://main.edu.pl/images/OI20/luk-en-tex.7.png)    (![](http://main.edu.pl/images/OI20/luk-en-tex.8.png)), separated by a single space,    indicating that towns ![](http://main.edu.pl/images/OI20/luk-en-tex.9.png) and ![](http://main.edu.pl/images/OI20/luk-en-tex.10.png) are directly connected with a two way road.
+
+In tests worth 50% of the total points, an additional condition ![](http://main.edu.pl/images/OI20/luk-en-tex.11.png) holds.
+
+**输出格式**
+
+The first and only line of the standard output is to hold a single integer,    the minimum number of crews that Byteasar's advisor needs to hire.
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+7
+1 2
+1 3
+2 5
+2 6
+7 2
+4 1
+```
+
+**样例输出 #1**
+
+```
+3
+```
+
+**提示**
+
+给一颗树，1号节点已经被染黑，其余是白的，两个人轮流操作，一开始B在1号节点，A选择k个点染黑，然后B走一步，如果B能走到A没染的节点则B胜，否则当A染完全部的点时，A胜。求能让A获胜的最小的k
+
+**解析**
+
+首先看出 $k$ 具有单调性，因此采用二分答案将最优性问题转化为判定性问题。
+
+其次，B 一定不会走回头路。因为走回头路就说明 B 的某一次选择不是所有选择中最优的，那 B 为啥不在那次选择时就采取最优策略呢？走回头路只会多给 A 染色的机会，那 B 的胜算就更小了。
+
+既然 B 不会走回头路，那么当 B 走到结点 $i$ 时，A 必须在 B 做下一次选择之前把结点 $i$ 的所有儿子染成黑色，不然 B 下一次走的时候走到结点 $i$ 没来得及染成黑色的儿子就胜利了。但是只用一次染色可能无法让结点 $i$ 的所有儿子都变成黑色，这时候就要未雨绸缪，在之前几次染色时提前把这些没法染成黑色的儿子染成黑色。换句话说，我们需要向“上一级”申请支援，因为以 $i$ 为根的子树内部已经无法“消化”掉需要染黑的结点了。
+
+那未雨绸缪的时机又该如何确定呢？假设在 B 走到结点 $j$ 时我们发现结点 $j$ 的儿子数小于 $k$，也就是说染色的次数会产生剩余，那我们就需要看一下结点 $j$ 的儿子里有没有需要支援的，把剩余的次数分配给它们。如果剩余的次数仍然够，那就又要向 $j$ 的“上一级”求援了。
+
+令 $f_{i}$表示以 $i$ 为根的子树（不包括 i）需要多少次数的支援，$f_{i}=cnt_{i}-k+\sum \max(f_{p},0)$。其中 $cnt_{i}$为 $i$ 的儿子数量，$p$ 为 $i$ 的儿子结点。如果 $f_{1}\le 0$，那么当前二分到的 $k$ 就是合法的，否则就是不合法的。
+
+二分的复杂度为 $O(\log v)$，v 为值域。一次 dp 复杂度为 $O(n)$，总复杂度为 $O(n\log v)$。这里我又对值域做了个小优化，因为结点 1 的所有儿子在第一次染色中一定要全被染成黑色而且不可能有支援，因此二分答案的下界可以取 $cnt_{1}$。同时，如果 $a$ 不小于任一结点的儿子数量，那么 $k=a$ 一定是一个合法的答案，二分答案的上界只需要取到 $a$。
+```c++
+
+```
+
+---
 ## P3592 [POI2015] MYJ(离散化/区间DP)
 
 **题目描述**
