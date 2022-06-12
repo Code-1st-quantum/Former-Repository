@@ -567,7 +567,53 @@ The first and only line of the standard output is to hold a single integer,    t
 ```c++
 
 ```
-
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct e{
+	int to,next;
+}edge[600005];
+int cnt=0,n,maxn=-1,head[300005],dp[300005],son[300005],ans=1e9;
+void add_edge(int u,int v){
+	edge[++cnt].next=head[u];
+	edge[cnt].to=v;
+	head[u]=cnt;
+}
+void predfs(int u,int fa){
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		son[u]++;
+		predfs(v,u);
+	}
+}
+void dfs(int u,int fa,int k){
+	dp[u]=son[u]-k;
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		dfs(v,u,k);
+		if(dp[v]>0) dp[u]+=dp[v];  //dp[v]<0 的话就不能加，因为下面并不需要支援，而这里能提供的支援又会被扩大，就不正确了
+	}
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<n;i++){
+		int u,v; scanf("%d%d",&u,&v);
+		add_edge(u,v); add_edge(v,u);
+	}
+	predfs(1,0);
+	for(int i=1;i<=n;i++) maxn=max(maxn,son[i]);
+	int l=son[1],r=maxn;
+	while(l<=r){
+		int mid=(l+r)>>1;
+		dfs(1,0,mid);
+		if(dp[1]<=0) r=mid-1,ans=min(ans,mid);
+		else l=mid+1;
+	} 
+	printf("%d",ans);
+	return 0;
+}
 ---
 ## P3592 [POI2015] MYJ(离散化/区间DP)
 
