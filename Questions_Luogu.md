@@ -855,7 +855,27 @@ int main(){
 
 原题名称：Wilcze doły。
 ```c++
-
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+ll n,p,d,a[2000005],sum[2000005],ans,q[2000005],h,t,l;
+int main(){
+	scanf("%lld%lld%lld",&n,&p,&d);
+	for(int i=1;i<=n;i++) scanf("%lld",&a[i]),sum[i]=sum[i-1]+a[i];
+	ans=d,l=1,q[0]=d;
+	for(int i=d+1;i<=n;i++){
+		while(h<=t&&sum[i]-sum[i-d]>=sum[q[t]]-sum[q[t]-d]) t--;
+		q[++t]=i;
+		while(h<=t&&sum[i]-sum[l-1]-(sum[q[h]]-sum[q[h]-d])>p){
+			l++;
+			while(h<=t&&q[h]-d+1<l) h++;
+		}
+		ans=max(ans,i-l+1);
+	}
+	printf("%lld",ans);
+	return 0;
+}
 ```
 
 ---
