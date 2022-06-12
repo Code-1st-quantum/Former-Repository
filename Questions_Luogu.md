@@ -1381,7 +1381,72 @@ int main(){
 }
 ```
 ---
-	
+## P4317 花神的数论题(动态规划/进制/数位DP)
+
+**题目背景**
+
+众所周知，花神多年来凭借无边的神力狂虐各大 OJ、OI、CF、TC …… 当然也包括 CH 啦。
+
+**题目描述**
+
+话说花神这天又来讲课了。课后照例有超级难的神题啦…… 我等蒟蒻又遭殃了。 花神的题目是这样的：设  $\text{sum}(i)$  表示  $i$  的二进制表示中  $1$  的个数。给出一个正整数  $N$  ，花神要问你  $\prod_{i=1}^{N}\text{sum}(i)$ ，也就是  $\text{sum}(1)\sim\text{sum}(N)$  的乘积。
+
+**输入格式**
+
+一个正整数 $N$。
+
+**输出格式**
+
+一个数，答案模 $10000007$ 的值。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+3
+```
+
+**样例输出 #1**
+
+```
+2
+```
+
+**提示**
+
+对于 $100\%$ 的数据，$1\le N\le 10^{15}$。
+```c++
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+typedef long long ll;
+const int mod=1e7+7;
+ll n,len=0,a[55],dp[55][55];  
+//数组要开大一点，因为是存二进制，要开到log2(1e15)
+ll dfs(int pos,int sum,int limit){
+	if(pos>len) return max(1,sum); //乘上 0的话就全盘覆没了
+	if(dp[pos][sum]!=-1&&!limit) return dp[pos][sum];
+	int ret=limit?a[len-pos+1]:1; ll ans=1;
+	for(int i=0;i<=ret;i++)
+	  ans=(ans*dfs(pos+1,sum+(i==1),limit&(i==ret)))%mod;
+	if(!limit) dp[pos][sum]=ans;
+	return ans;
+}
+int main(){
+	scanf("%lld",&n);
+	while(n){
+		a[++len]=n&1;
+		n>>=1;
+	}
+	memset(dp,-1,sizeof dp); 
+	printf("%lld",dfs(1,0,1));
+	return 0;
+}
+```
+---
+
 ## P4408 [NOI2003] 逃学的小孩(树的直径/贪心)
 
 **题目描述**
