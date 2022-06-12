@@ -565,8 +565,6 @@ The first and only line of the standard output is to hold a single integer,    t
 
 二分的复杂度为 $O(\log v)$，v 为值域。一次 dp 复杂度为 $O(n)$，总复杂度为 $O(n\log v)$。这里我又对值域做了个小优化，因为结点 1 的所有儿子在第一次染色中一定要全被染成黑色而且不可能有支援，因此二分答案的下界可以取 $cnt_{1}$。同时，如果 $a$ 不小于任一结点的儿子数量，那么 $k=a$ 一定是一个合法的答案，二分答案的上界只需要取到 $a$。
 ```c++
-
-```
 #include<cstdio>
 #include<algorithm>
 using namespace std;
@@ -614,6 +612,7 @@ int main(){
 	printf("%d",ans);
 	return 0;
 }
+```
 ---
 ## P3592 [POI2015] MYJ(离散化/区间DP)
 
