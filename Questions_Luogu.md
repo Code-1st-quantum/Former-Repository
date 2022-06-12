@@ -386,6 +386,72 @@ int main(){
 }
 ```
 ---
+## P1836 数页码(动态规划/数位DP)
+
+**题目描述**
+
+一本书的页码是从 $1\sim n$ 编号的连续整数：$1,2,3,\cdots,n$。请你求出全部页码中所有单个数字的和，例如第 $123$ 页，它的和就是 $ 1+2+3=6$。
+
+**输入格式**
+
+一行一个整数 $n$。
+
+**输出格式**
+
+一行，代表所有单个数字的和。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+3456789
+```
+
+**样例输出 #1**
+
+```
+96342015
+```
+
+**提示**
+
+$1\le n\le 10^9$
+```c++
+#include<cstdio>
+#include<cstring>
+using namespace std;
+typedef long long ll;
+ll x,len=0,a[12],dp[12][12];
+ll dfs(int pos,ll sum,int num,int limit,int lead){
+	if(!pos) return sum;
+	if(!limit&&!lead&&dp[pos][sum]!=-1) return dp[pos][sum];
+	ll ans=0,ret=limit?a[pos]:9;
+	for(int i=0;i<=ret;i++)
+	  ans+=dfs(pos-1,sum+(i==num),num,limit&&(i==ret),lead&&(!i));
+	if(!limit&&!lead) dp[pos][sum]=ans;
+	return ans;
+}
+ll work(){
+	ll x2=x; ll ans=0;
+	while(x2){
+		a[++len]=x2%10;
+		x2/=10;
+	}
+	for(int i=1;i<=9;i++){
+		memset(dp,-1,sizeof dp);
+		ans+=i*dfs(len,0,i,1,1);
+	}
+	return ans;
+}
+int main(){
+	scanf("%lld",&x);
+	printf("%lld",work());
+	return 0;
+}
+```
+---
+
 ## P1902 刺杀大使(二分答案/搜索)
 
 **题目描述**
