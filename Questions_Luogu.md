@@ -508,6 +508,74 @@ int main(){
 
 原题名称：Myjnie。
 
+**解析**
+
+设 $dp[i][j][k]$ 为在区间 $[i,j]$ 内，最低价格为 $k$ 时的最大收益 
+
+则转移方程：
+
+$dp[i][j][k]=\begin{cases} dp[i][j][k+1] \\\ max(dp[i][l-1][k]+dp[l+1][j][k]+val(i,j,l,k)(i<=l<=j))\end{cases}$
+
+第一种转移：价格从大到小逐层传递，虽然人可能少一些，但价格更高
+
+第二种转移： $val(i,j,k,l)$ 表示在 $[i,j]$ 的区间内，最小值在 $l$ 处，最小值为 $k$ 时的收益，
+枚举断点 $val(i,j,k,l)=cnt(i,j,k,l)\times k$ , $cnt(i,j,k,l)$ 表示在 $[i,j]$ 的区间内 ， 最小值在 $l$ 处 ，最小值为 $k$ 时 ，在 $l$ 处消费的顾客数
+
+所以最终答案为 $dp[1][n][1]$ ,因为最后一维的 $k$ (现在是 1) ，是在 dp 过程中将上面的 $(k+1,k+2...)$ 已经传递了
+```c++
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n,m,a[4005],b[4005],c[4005],d[4005],tot;
+int g[55][4005],dp[55][55][4005],val[55][55][4005],num[55][55][4005],ans[55]; 
+/* 
+1.g[i][j]表示在第 i 个洗车店 ,价格为 j ,会有多少人来  
+2.dp[i][j][k] 表示在 [i,j] 这个区间内 ，最低价格为 k 时的最大收益 
+3.val[i][j][k] 表示当 dp[i][j][k] 取到最优值时，价格为多少
+  (取到最优值时价格不一定为 k ，因为最优值可能从 dp[i][j][k+1] 转移而来，也就是从更高的价格转移而来)
+4.num[i][j][k] 表示当 dp[i][j][k] 取到最优值时，断点是哪里 
+*/ 
+void print(int l,int r,int k){
+	if(l>r) return;
+	int p=num[l][r][k=val[l][r][k]];
+	ans[p]=d[k]; //是 d[k] ,而不是 k ,k是离散化后的价格
+	print(l,p-1,k),print(p+1,r,k); 
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=m;i++) scanf("%d%d%d",&a[i],&b[i],&c[i]),d[i]=c[i];
+	sort(d+1,d+m+1);
+	tot=unique(d+1,d+m+1)-d-1;
+	for(int i=1;i<=m;i++) c[i]=lower_bound(d+1,d+tot+1,c[i])-d; //离散化
+	for(int len=1;len<=n;len++)
+	  for(int i=1;i+len-1<=n;i++){
+	  	int j=i+len-1;
+	  	for(int k=i;k<=j;k++)
+	  	  for(int t=1;t<=tot;t++)
+	  	    g[k][t]=0;  //将数组清空 
+	  	for(int p=1;p<=m;p++) //枚举第 p 个人
+		  if(i<=a[p]&&b[p]<=j) //判断这个人的区间是否只在 [i,j] 里
+		    for(int k=a[p];k<=b[p];k++)
+			  g[k][c[p]]++;    
+		for(int k=i;k<=j;k++)
+		  for(int t=tot-1;t;t--) //从大到小枚举 
+		    g[k][t]+=g[k][t+1];  //若 t+1 的价格都可以，那么 t 也可以 
+		for(int k=tot;k;k--){  //枚举最低价格，从大往小，因为小的价格可能从更高的价格转移而来 
+		  int ans=0,maxn=0;
+		  for(int l=i;l<=j;l++) //枚举断点
+		    if((ans=dp[i][l-1][k]+dp[l+1][j][k]+g[l][k]*d[k])>=maxn) maxn=ans,num[i][j][k]=l;
+		  if(maxn<dp[i][j][k+1]) //和上一次那个比较，也就是转移方程里的第一种情况
+		    dp[i][j][k]=dp[i][j][k+1],val[i][j][k]=val[i][j][k+1];
+		  else dp[i][j][k]=maxn,val[i][j][k]=k;
+		}
+	  } 
+	  printf("%d\n",dp[1][n][1]);
+	  print(1,n,1);
+	  for(int i=1;i<=n;i++) printf("%d ",ans[i]);
+	  return 0;
+} 
+```
+
 ---
 ## P3718 [AHOI2017初中组]alter(二分答案)
 
