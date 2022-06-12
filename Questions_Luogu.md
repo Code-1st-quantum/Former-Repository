@@ -1,6 +1,5 @@
 **$\mathbf{\color{Purple}{Welcome\ to\ The\ OI\ -\ Space\ of\ Code}} \mathbf{\color{Purple}{\underline{\ \ }}} \mathbf{\color{Purple}{quantum\ on\ Github}}$**
 
-
 PS.在输入算法名称寻找相应题目时，若要输入多个算法，请按照拼音字典序依次输入，两个算法间添加 '/' 符号。
 ## P1002 [NOIP2002 普及组] 过河卒(递推)
 
