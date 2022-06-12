@@ -1658,3 +1658,78 @@ int main(){
     return 0;
 }
 ```
+---
+## P6218 [USACO06NOV] Round Numbers S(动态规划/进制/数位DP)
+
+**题目描述**
+
+如果一个正整数的二进制表示中，$0$ 的数目不小于 $1$ 的数目，那么它就被称为「圆数」。
+
+例如，$9$ 的二进制表示为 $1001$，其中有 $2$ 个 $0$ 与 $2$ 个 $1$。因此，$9$ 是一个「圆数」。
+
+请你计算，区间 $[l,r]$ 中有多少个「圆数」。
+
+**输入格式**
+
+一行，两个整数 $l,r$。
+
+**输出格式**
+
+一行，一个整数，表示区间 $[l,r]$ 中「圆数」的个数。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+2 12
+```
+
+**样例输出 #1**
+
+```
+6
+```
+
+**提示**
+
+【数据范围】
+
+对于 $100\%$ 的数据，$1\le l,r\le 2\times 10^9$。
+
+------------
+
+【样例说明】
+
+区间 $[2,12]$ 中共有 $6$ 个「圆数」，分别为 $2,4,8,9,10,12$。
+```c++
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+int a[32],len=0,l,r,dp[32][32][32];
+int dfs(int pos,int one,int zero,int limit,int lead){
+	if(!pos) return ((zero>=one)||lead);
+	if(!lead&&!limit&&dp[pos][one][zero]!=-1) return dp[pos][one][zero];
+	int ans=0,ret=limit?a[pos]:1;
+	for(int i=0;i<=ret;i++)
+	  if(lead&&(!i)) ans+=dfs(pos-1,one,zero,limit&(i==ret),1);
+	  else ans+=dfs(pos-1,one+(i==1),zero+(i==0),limit&(i==ret),0);
+	if(!lead&&!limit) dp[pos][one][zero]=ans;
+	return ans;
+}
+int solve(int x){
+	memset(dp,-1,sizeof dp);
+	len=0;
+	while(x){
+		a[++len]=x&1;
+		x>>=1;
+	}
+	return dfs(len,0,0,1,1);
+}
+int main(){
+	scanf("%d%d",&l,&r);
+	printf("%d",solve(r)-solve(l-1));
+	return 0;
+}
+```
