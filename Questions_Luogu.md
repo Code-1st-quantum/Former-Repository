@@ -851,9 +851,8 @@ int main(){
 
 对于 $100\%$ 的数据，$1 \le d \le n \le 2 \times 10^6$，$0 \le p \le 10^{16}$，$1 \leq w_i \leq 10^9$。
 
-----
-
 原题名称：Wilcze doły。
+
 ```c++
 #include<cstdio>
 #include<algorithm>
