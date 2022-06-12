@@ -470,6 +470,101 @@ int main(){
 }
 ```
 ---
+## P3174 [HAOI2009] 毛毛虫(树的直径)
+
+**题目描述**
+
+对于一棵树，我们可以将某条链和与该链相连的边抽出来，看上去就象成一个毛毛虫，点数越多，毛毛虫就越大。例如下图左边的树（图 $1$）抽出一部分就变成了右边的一个毛毛虫了（图 $2$）。
+
+![](https://cdn.luogu.com.cn/upload/pic/7967.png)
+
+**输入格式**
+
+输入中第一行两个整数 $N, M$，分别表示树中结点个数和树的边数。
+
+接下来 $M$ 行，每行两个整数 $a, b$ 表示点 $a$ 和点 $b$ 有边连接（$a, b \le N$）。你可以假定没有一对相同的 $(a, b)$ 会出现一次以上。
+
+**输出格式**
+
+输出一行一个整数 , 表示最大的毛毛虫的大小。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+13 12 
+1 2 
+1 5 
+1 6 
+3 2 
+4 2 
+5 7 
+5 8 
+7 9 
+7 10 
+7 11 
+8 12 
+8 13
+```
+
+**样例输出 #1**
+
+```
+11
+```
+
+**提示**
+
+对于 $40\%$ 的数据，$1\leq N \le 50000$。
+
+对于 $100\%$ 的数据，$1\leq N \le 300000$。
+```c++
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct e{
+	int to,next;
+}edge[600005];
+int ans=-1,root,n,m,cnt=0,calc[300005],head[300005];
+void add_edge(int u,int v){
+	edge[++cnt].to=v;
+	edge[cnt].next=head[u];
+	head[u]=cnt;
+}
+void predfs(int u,int fa,int sum){
+	if(sum>ans){ans=sum; root=u;}
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		predfs(v,u,sum-2+calc[v]);
+	}
+}
+void dfs(int u,int fa,int sum){
+	if(sum>ans){ans=sum;}
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		dfs(v,u,sum-2+calc[v]);
+	}
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++) calc[i]=1;
+	for(int i=1;i<=m;i++){
+		int u,v;
+		scanf("%d%d",&u,&v);
+		calc[v]++,calc[u]++;
+		add_edge(u,v); add_edge(v,u);
+	}
+	predfs(1,0,calc[1]);
+	dfs(root,0,calc[root]);
+	printf("%d",ans);
+	return 0;
+}
+```
+
+---
 ## P3554 [POI2013]LUK-Triumphal arch(二分答案/树形DP)
 
 **题目描述**
@@ -995,6 +1090,102 @@ int main(){
 		else l=mid+1;
 	}
 	printf("%lld",ans);
+	return 0;
+}
+```
+---
+## P4408 [NOI2003] 逃学的小孩(树的直径/贪心)
+
+**题目描述**
+
+Chris 家的电话铃响起了，里面传出了 Chris 的老师焦急的声音：“喂，是 Chris 的家长吗？你们的孩子又没来上课，不想参加考试了吗？”一听说要考试，Chris 的父母就心急如焚，他们决定在尽量短的时间内找到 Chris。他们告诉 Chris 的老师：“根据以往的经验，Chris 现在必然躲在朋友 Shermie 或 Yashiro 家里偷玩《拳皇》游戏。现在，我们就从家出发去找 Chris，一但找到，我们立刻给您打电话。”说完砰的一声把电话挂了。
+
+Chris 居住的城市由 $N$ 个居住点和若干条连接居住点的双向街道组成，经过街道 $x$ 需花费 $T_{x}$ 分钟。可以保证，任两个居住点间有且仅有一条通路。Chris 家在点 $C$，Shermie 和 Yashiro 分别住在点 $A$ 和点 $B$。Chris 的老师和 Chris 的父母都有城市地图，但 Chris 的父母知道点 $A$、$B$、$C$ 的具体位置而 Chris 的老师不知。
+
+为了尽快找到 Chris，Chris 的父母会遵守以下两条规则：
+
+1. 如果 $A$ 距离 $C$ 比 $B$ 距离 $C$ 近，那么 Chris 的父母先去 Shermie 家寻找 Chris，如果找不到，Chris 的父母再去 Yashiro 家；反之亦然。
+2. Chris 的父母总沿着两点间唯一的通路行走。
+
+显然，Chris 的老师知道 Chris 的父母在寻找 Chris 的过程中会遵守以上两条规则，但由于他并不知道 $A$、$B$、$C$ 的具体位置，所以现在他希望你告诉他，最坏情况下 Chris的父母要耗费多长时间才能找到 Chris？
+
+**输入格式**
+
+输入文件第一行是两个整数 $N$ 和 $M$，分别表示居住点总数和街道总数。
+
+以下 $M$ 行，每行给出一条街道的信息。第 $i+1$ 行包含整数 $U_{i}$、$V_{i}$、$T_{i}$，表示街道 $i$ 连接居住点 $U_{i}$ 和 $V_{i}$，并且经过街道 $i$ 需花费 $T_{i}$ 分钟。街道信息不会重复给出。
+
+**输出格式**
+
+输出文件仅包含整数 $T$，即最坏情况下 Chris 的父母需要花费 $T$ 分钟才能找到 Chris。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+4 3
+1 2 1
+2 3 1
+3 4 1
+```
+
+**样例输出 #1**
+
+```
+4
+```
+
+**提示**
+
+对于 $100\%$ 的数据，$3 \le N \le 2\times 10^5$，$1 \le U_{i},V_{i} \le N$，$1 \le T_{i} \le 10^{9}$。
+```c++
+//贪心证明参考 https://www.luogu.com.cn/blog/ILikeDuck/solution-p4408
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+struct e{
+	int to,next; ll w;
+}edge[400005];
+ll cnt=0,n,m,head[200005],f[200005],maxn,root[2],dist[200005][2],ans;
+void add_edge(int u,int v,ll w){
+	edge[++cnt].to=v;
+	edge[cnt].next=head[u];
+	edge[cnt].w=w;
+	head[u]=cnt;
+}
+void dfs1(int u,int fa,int k,ll sum){
+	if(sum>maxn){maxn=sum; root[k]=u;} 
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		dfs1(v,u,k,sum+edge[i].w);
+	}
+}
+void dfs(int u,int fa,int k){
+	for(int i=head[u];i;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		dist[v][k]=dist[u][k]+edge[i].w;
+		dfs(v,u,k);
+	}
+}
+int main(){
+	scanf("%lld%lld",&n,&m);
+	for(int i=1;i<=m;i++){
+		ll u,v,w;
+		scanf("%lld%lld%lld",&u,&v,&w);
+		add_edge(u,v,w);
+		add_edge(v,u,w);
+	}
+	dfs1(1,0,0,0);
+	maxn=0;
+	dfs1(root[0],0,1,0);
+	dfs(root[0],0,0);
+	dfs(root[1],0,1);
+	for(int i=1;i<=n;i++) ans=max(ans,min(dist[i][0],dist[i][1])); //贪心 
+	printf("%lld",maxn+ans);
 	return 0;
 }
 ```
