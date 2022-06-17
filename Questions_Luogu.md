@@ -1848,7 +1848,61 @@ int main(){
 对于 50% 的数据，1 ≤ n ≤ $10^3$, 1 ≤ m ≤ $10^4$；
 对于 100% 的数据，1 ≤ n ≤ $10^5$, 1 ≤ m ≤ 5 × $10^5$，保证 L ≤ R。
 ```c++
-
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+struct sgtree{
+	ll l,r,d,num;
+}tree[400005];
+ll n,m,a[100005];
+void build(ll x,ll l,ll r){
+	tree[x].l=l,tree[x].r=r;
+	if(l==r){tree[x].num=0; return;}
+	ll mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	tree[x].num=tree[x<<1].num+tree[x<<1|1].num;
+}
+void pushdown(ll x){
+	tree[x<<1].d+=tree[x].d;
+	tree[x<<1|1].d+=tree[x].d;
+	tree[x<<1].num+=tree[x].d*(tree[x<<1].r-tree[x<<1].l+1);
+	tree[x<<1|1].num+=tree[x].d*(tree[x<<1|1].r-tree[x<<1|1].l+1);
+	tree[x].d=0;
+}
+ll query(ll x,ll l){
+	if(tree[x].l==tree[x].r) return (tree[x].num&1);
+	if(tree[x].d) pushdown(x);
+	ll mid=(tree[x].l+tree[x].r)>>1;
+	if(l<=mid) return query(x<<1,l);
+	else return query(x<<1|1,l);
+}
+void modify(ll x,ll l,ll r){
+	if(l<=tree[x].l&&r>=tree[x].r){
+		tree[x].num+=(tree[x].r-tree[x].l+1);
+		tree[x].d++;
+		return;
+	}
+	if(tree[x].d) pushdown(x);
+	ll mid=(tree[x].l+tree[x].r)>>1;
+	if(l<=mid) modify(x<<1,l,r);
+	if(r>mid) modify(x<<1|1,l,r);
+	tree[x].num=tree[x<<1].num+tree[x<<1|1].num;
+}
+int main(){
+	scanf("%lld%lld",&n,&m);
+	build(1,1,n);
+	while(m--){
+		int op,l,r; scanf("%d%d",&op,&l);
+		if(op==1){
+			scanf("%d",&r);
+			modify(1,l,r);
+		}else printf("%lld\n",query(1,l));
+	}
+	return 0;
+}
 ```
 ---
 ## P6186 [NOI Online #1 提高组] 冒泡排序(逆序对/树状数组)
