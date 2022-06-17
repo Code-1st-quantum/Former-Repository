@@ -368,6 +368,47 @@ int main(){
 	return 0;
 }
 ```
+#### 线段树之区间修改单点查询(省空间版) 
+ [洛谷 P4939 Agent2](https://www.luogu.com.cn/problem/P4939)
+```c++
+#include<cstdio>
+#include<algorithm>
+#define N 20000002
+using namespace std;
+int n,m,a[N],s1[N],s2[N],sum=1;
+void modify(int x,int l,int r,int ql,int qr){
+	if(ql<=l&&qr>=r){a[x]++; return;}
+	int mid=(l+r)>>1;
+	if(ql<=mid){
+		if(!s1[x]) s1[x]=++sum;
+		modify(s1[x],l,mid,ql,qr);
+	}
+	if(qr>mid){
+		if(!s2[x]) s2[x]=++sum;
+		modify(s2[x],mid+1,r,ql,qr);
+	}
+}
+int query(int x,int l,int r,int k){
+	if(l==r) return a[x];
+	int mid=(l+r)>>1;
+	if(k<=mid) return a[x]+query(s1[x],l,mid,k);
+	else return a[x]+query(s2[x],mid+1,r,k);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	while(m--){
+		int op; scanf("%d",&op);
+		if(op==0){
+			int l,r; scanf("%d%d",&l,&r);
+			modify(1,1,n,l,r);
+		}else{
+			int x; scanf("%d",&x);
+			printf("%d\n",query(1,1,n,x)); 
+		}
+	}
+	return 0;
+}
+```
 
 #### 线段树之区间修改区间查询 Segment Tree (Both Modify and Inquiry on Sections) 
 ```c++
