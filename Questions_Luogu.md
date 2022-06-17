@@ -1851,6 +1851,138 @@ int main(){
 
 ```
 ---
+## P6186 [NOI Online #1 提高组] 冒泡排序(逆序对/树状数组)
+
+**题目描述**
+
+给定一个 $1 ∼ n$ 的排列 $p_i$，接下来有 $m$ 次操作，操作共两种：
+1. 交换操作：给定 $x$，将当前排列中的第 $x$ 个数与第 $x+1$ 个数交换位置。
+2. 询问操作：给定 $k$，请你求出当前排列经过 $k$ 轮冒泡排序后的逆序对个数。
+对一个长度为 $n$ 的排列 $p_i$ 进行一轮冒泡排序的伪代码如下：
+```
+for i = 1 to n-1:
+  if p[i] > p[i + 1]:
+    swap(p[i], p[i + 1])
+```
+
+**输入格式**
+
+第一行两个整数 $n$，$m$，表示排列长度与操作个数。
+
+第二行 $n$ 个整数表示排列 $p_i$。
+
+接下来 $m$ 行每行两个整数 $t_i$，$c_i$，描述一次操作：
+- 若 $t_i=1$，则本次操作是交换操作，$x=c_i$；
+- 若 $t_i=2$，则本次操作是询问操作，$k=c_i$。
+
+**输出格式**
+
+对于每次询问操作输出一行一个整数表示答案。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+3 6
+1 2 3
+2 0
+1 1
+1 2
+2 0
+2 1
+2 2
+```
+
+**样例输出 #1**
+
+```
+0
+2
+1
+0
+```
+
+**提示**
+
+**样例一解释**
+第一次操作：排列为 $\{1,2,3\}$，经过 0 轮冒泡排序后为 $\{1,2,3\}$，$0$ 个逆序对。
+
+第二次操作：排列变为 $\{2,1,3\}$。
+
+第三次操作：排列变为 $\{2,3,1\}$。
+
+第四次操作：经过 $0$ 轮冒泡排序后排列变为 $\{2,3,1\}$，$2$ 个逆序对。
+
+第五次操作：经过 $1$ 轮冒泡排序后排列变为 $\{2,1,3\}$，$1$ 个逆序对。
+
+第六次操作：经过 $2$ 轮冒泡排序后排列变为 $\{1,2,3\}$，$0$ 个逆序对。
+
+---
+
+**数据范围与提示**
+对于测试点 1 ∼ 2：$n,m \leq 100$。
+
+对于测试点 3 ∼ 4：$n,m \leq 2000$。
+
+对于测试点 5 ∼ 6：交换操作个数不超过 $100$。
+
+对于所有测试点：$2 \leq n,m \leq 2 \times 10^5$，$t_i \in \{1,2\}$，$1 \leq x < n$，$0 \leq k < 2^{31}$。
+```c++
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#define N 200005
+using namespace std;
+typedef long long ll;
+ll c[N],tot=0,sum=0,a[N],bef[N],t[N],n,m;
+ll lowbit(ll x){return x&(-x);}
+void add(ll x,ll k){
+	for(;x<=n;x+=lowbit(x)) c[x]+=k;
+}
+ll ask(ll x){
+	ll ans=0;
+	for(;x;x-=lowbit(x)) ans+=c[x];
+	return ans;
+}
+int main(){
+	scanf("%lld%lld",&n,&m);
+	for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+	for(int i=1;i<=n;i++){
+		bef[i]=i-ask(a[i])-1;
+		sum+=bef[i];
+		t[bef[i]]++;
+		add(a[i],1);
+	}
+	memset(c,0,sizeof c);
+	add(1,sum);
+	for(int i=1;i<=n;i++){
+		tot+=t[i-1];
+		add(i+1,-(n-tot));
+	}
+	for(int i=1;i<=m;i++){
+		int op; ll x; scanf("%d%lld",&op,&x);
+		x=min(x,(ll)(n-1));
+		if(op==1){
+			if(a[x]<a[x+1]){
+				swap(a[x],a[x+1]);
+				swap(bef[x],bef[x+1]);
+				add(1,1);
+				bef[x+1]++;
+				add(bef[x+1]+1,-1);
+			}else{
+				swap(a[x],a[x+1]);
+				swap(bef[x],bef[x+1]);
+				add(1,-1);
+				add(bef[x]+1,1);
+				bef[x]--;
+			}
+		}else printf("%lld\n",(ll)ask(x+1));
+	}
+	return 0;
+}
+```
+---
 ## P6218 [USACO06NOV] Round Numbers S(动态规划/进制/数位DP)
 
 **题目描述**
