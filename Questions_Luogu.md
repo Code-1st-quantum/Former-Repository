@@ -1796,6 +1796,91 @@ int main(){
 ```
 ---
 
+## P4392 [BOI2007]Sound 静音问题
+
+**题目描述**
+
+数字录音中，声音是用表示空气压力的数字序列描述的，序列中的每个值称为一个采样，每个采样之间间隔一定的时间。 
+
+很多声音处理任务都需要将录到的声音分成由静音隔开的几段非静音段。为了避免分成过多或者过少的非静音段，静音通常是这样定义的：m个采样的序列，该序列中采样的最大值和最小值之差不超过一个特定的阈值c。 
+
+请你写一个程序，检测n个采样中的静音。
+
+**输入格式**
+
+第一行有三个整数n，m，c（ 1<= n<=1000000，1<=m<=10000， 0<=c<=10000），分别表示总的采样数、静音的长度和静音中允许的最大噪音程度。
+
+第2行n个整数ai (0 <= ai <= 1,000,000)，表示声音的每个采样值，每两个整数之间用空格隔开。
+
+**输出格式**
+
+列出了所有静音的起始位置i（i满足max(a[i, . . . , i+m−1]) − min(a[i, . . . , i+m−1]) <= c），每行表示一段静音的起始位置，按照出现的先后顺序输出。如果没有静音则输出NONE。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+7 2 0
+0 1 1 2 3 2 2
+```
+
+**样例输出 #1**
+
+```
+2
+6
+```
+```c++
+#include<cstdio>
+#include<algorithm>
+#define MAXN 1000005
+using namespace std;
+struct sgtree{
+	int l,r,maxn,minn;
+	#define l(x) tree[x].l
+	#define r(x) tree[x].r
+	#define maxn(x) tree[x].maxn
+	#define minn(x) tree[x].minn
+}tree[4*MAXN];
+int n,m,c;
+bool flag=false;
+void build(int x,int l,int r){
+	l(x)=l,r(x)=r;
+	if(l==r){scanf("%d",&maxn(x)); minn(x)=maxn(x); return;}
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	maxn(x)=max(maxn(x<<1),maxn(x<<1|1));
+	minn(x)=min(minn(x<<1),minn(x<<1|1));
+}
+int ask(int x,int l,int r,int op){
+	if(l<=l(x)&&r>=r(x)){
+		if(op==1) return maxn(x);
+		else return minn(x);
+	}
+	int mx=-1e9,mn=1e9;
+	int mid=(l(x)+r(x))>>1;
+	if(l<=mid) mx=max(ask(x<<1,l,r,op),mx),
+	           mn=min(ask(x<<1,l,r,op),mn);
+	if(r>mid) mx=max(mx,ask(x<<1|1,l,r,op)),
+	          mn=min(mn,ask(x<<1|1,l,r,op));
+	if(op==1) return mx;
+	else return mn;
+}
+int main(){
+	scanf("%d%d%d",&n,&m,&c);
+	build(1,1,n);
+	for(int i=1;i+m-1<=n;i++)
+	  if(ask(1,i,i+m-1,1)-ask(1,i,i+m-1,2)<=c){
+		flag=true;
+		printf("%d\n",i);
+	  }
+	if(!flag) printf("NONE\n");
+	return 0;
+}
+```
+---
 ## P4408 [NOI2003] 逃学的小孩(树的直径/贪心)
 
 **题目描述**
