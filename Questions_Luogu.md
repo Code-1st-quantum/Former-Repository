@@ -746,7 +746,74 @@ The entire horizon is represented by a number line with N (1 ≤ N ≤ 40,000) b
 
 N<=40000 , a、b、k<=10^9 。
 ```c++
-
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+struct house{
+	int h,l,r;
+	bool operator < (const house x)const {return h<x.h;}
+}a[40005];
+struct sgtree{
+	int l,r,d,num;
+	#define num(x) tree[x].num
+	#define l(x) tree[x].l
+	#define r(x) tree[x].r
+	#define d(x) tree[x].d
+}tree[360005];
+ll ans=0;
+int n,all[120005],sum=0,tot;
+void build(int x,int l,int r){
+	l(x)=l,r(x)=r,d(x)=0;
+	if(l==r) return;
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+}
+void pushdown(int x){
+	d(x<<1)=d(x);
+	d(x<<1|1)=d(x);
+	num(x<<1)=d(x);
+	num(x<<1|1)=d(x);
+	d(x)=0;
+}
+void modify(int x,int l,int r,int k){
+	if(l<=l(x)&&r>=r(x)){d(x)=k; num(x)=k; return;}
+	if(d(x)) pushdown(x);
+	int mid=(l(x)+r(x))>>1;
+	if(l<=mid) modify(x<<1,l,r,k);
+	if(r>mid) modify(x<<1|1,l,r,k);
+}
+int query(int x,int l,int r){
+	if(l<=l(x)&&r>=r(x)) return num(x);
+	if(d(x)) pushdown(x);
+	int mid=(l(x)+r(x))>>1;
+	if(l<=mid) return query(x<<1,l,r);
+	if(r>mid) return query(x<<1|1,l,r);
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		scanf("%d%d%d",&a[i].l,&a[i].r,&a[i].h); a[i].r--;
+		all[++sum]=a[i].l,all[++sum]=a[i].r,all[++sum]=a[i].r+1;
+	}
+	sort(all+1,all+sum+1);
+	sort(a+1,a+n+1);
+	tot=unique(all+1,all+sum+1)-(all+1);
+	build(1,1,tot);
+	for(int i=1;i<=n;i++){
+		int l=lower_bound(all+1,all+tot+1,a[i].l)-all;
+		int r=lower_bound(all+1,all+tot+1,a[i].r)-all;
+		modify(1,l,r,a[i].h);
+	}
+	int lasthigh=query(1,1,1),p=1;
+	for(int i=2;i<=tot;i++){
+		int now=query(1,i,i);
+		if(now!=lasthigh) ans+=1ll*(all[i]-all[p])*lasthigh,p=i,lasthigh=now;
+	}
+	printf("%lld",ans);
+	return 0;
+}
 ```
 ---
 ## P2569 [SCOI2010]股票交易(单调队列/动态规划)
