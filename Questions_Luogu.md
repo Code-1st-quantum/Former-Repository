@@ -2476,3 +2476,124 @@ int main(){
 	return 0;
 }
 ```
+---
+## P6492 [COCI2010-2011#6] STEP(线段树)
+
+**题目描述**
+
+给定一个长度为 $n$ 的字符序列 $a$，初始时序列中全部都是字符 `L`。
+
+有 $q$ 次修改，每次给定一个 $x$，若 $a_x$ 为 `L`，则将 $a_x$ 修改成 `R`，否则将 $a_x$ 修改成 `L`。
+
+对于一个只含字符 `L`，`R` 的字符串 $s$，若其中不存在连续的 `L` 和 `R`，则称 $s$ 满足要求。
+
+每次修改后，请输出当前序列 $a$ 中最长的满足要求的连续子串的长度。
+
+**输入格式**
+
+第一行有两个整数，分别表示序列的长度 $n$ 和修改操作的次数 $q$。
+
+接下来 $q$ 行，每行一个整数，表示本次修改的位置 $x$。
+
+**输出格式**
+
+对于每次修改操作，输出一行一个整数表示修改 $a$ 中最长的满足要求的子串的长度。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+6 2
+2
+4
+```
+
+**样例输出 #1**
+
+```
+3
+5
+```
+
+**样例 #2**
+
+**样例输入 #2**
+
+```
+6 5
+4
+1
+1
+2
+6
+```
+
+**样例输出 #2**
+
+```
+3
+3
+3
+5
+6
+```
+
+**提示**
+
+**数据规模与约定**
+
+对于全部的测试点，保证 $1 \leq n, q \leq 2 \times 10^5$，$1 \leq x \leq n$。
+
+**说明**
+
+**题目译自 [COCI2010-2011](https://hsin.hr/coci/archive/2010_2011/) [CONTEST #6](https://hsin.hr/coci/archive/2010_2011/contest6_tasks.pdf) *T5 STEP***。
+```c++
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct sgtree{
+	int l,r,suml,sum,sumr;
+	#define l(x) tree[x].l
+	#define r(x) tree[x].r
+	#define suml(x) tree[x].suml
+	#define sumr(x) tree[x].sumr
+	#define sum(x) tree[x].sum
+}tree[800005];
+int a[200005],n,m;
+void pushup(int x){
+	int lenl=(r(x<<1)-l(x<<1)+1);
+	int lenr=(r(x<<1|1)-l(x<<1|1)+1);
+	suml(x)=suml(x<<1),sumr(x)=sumr(x<<1|1),sum(x)=max(sum(x<<1),sum(x<<1|1));
+	if(a[r(x<<1)]!=a[l(x<<1|1)]){
+		if(sum(x<<1)==lenl) suml(x)=sum(x<<1)+suml(x<<1|1);
+		if(sum(x<<1|1)==lenr) sumr(x)=sum(x<<1|1)+sumr(x<<1);
+		sum(x)=max(sum(x),sumr(x<<1)+suml(x<<1|1));
+	} 
+} 
+void build(int x,int l,int r){
+	l(x)=l,r(x)=r,suml(x)=sumr(x)=sum(x)=1;
+	if(l==r) return;
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	pushup(x);
+}
+void modify(int x,int k){
+	if(l(x)==r(x)&&l(x)==k){a[l(x)]^=1; return;}
+	int mid=(l(x)+r(x))>>1;
+	if(k<=mid) modify(x<<1,k);
+	else modify(x<<1|1,k);
+	pushup(x);
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	build(1,1,n);
+	while(m--){
+		int x; scanf("%d",&x);
+		modify(1,x);
+		printf("%d\n",sum(1));
+	}
+	return 0;
+}
+```
