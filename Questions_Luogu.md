@@ -701,7 +701,54 @@ int main(){
 }
 ```
 ---
+## P2061 [USACO07OPEN]City Horizon S(离散化/线段树)
 
+## 题面翻译
+
+约翰带着奶牛去都市观光。在落日的余晖里，他们看到了一幢接一幢的摩天高楼的轮廓在地平线 上形成美丽的图案。以地平线为 X 轴，每幢高楼的轮廓是一个位于地平线上的矩形，彼此间可能有 重叠的部分。奶牛一共看到了 N 幢高楼，第 i 幢楼的高度是 Hi，两条边界轮廓在地平线上的坐标是 Ai 到 Bi。请帮助奶牛们计算一下，所有摩天高楼的轮廓覆盖的总面积是多少。
+
+
+**题目描述**
+
+Farmer John has taken his cows on a trip to the city! As the sun sets, the cows gaze at the city horizon and observe the beautiful silhouettes formed by the rectangular buildings.
+
+The entire horizon is represented by a number line with N (1 ≤ N ≤ 40,000) buildings. Building i's silhouette has a base that spans locations Ai through Bi along the horizon (1 ≤ Ai < Bi ≤ 1,000,000,000) and has height Hi (1 ≤ Hi ≤ 1,000,000,000). Determine the area, in square units, of the aggregate silhouette formed by all N buildings.
+
+有一个数列，初始值均为0，他进行N次操作，每次将数列[ai,bi)这个区间中所有比Hi小的数改为Hi，他想知道N次操作后数列中所有元素的和。
+
+**输入格式**
+
+第一行一个整数N，然后有N行，每行三个正整数ai、bi、Hi。
+
+**输出格式**
+
+一个数，数列中所有元素的和。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+4
+2 5 1
+9 10 4
+6 8 2
+4 6 3
+```
+
+**样例输出 #1**
+
+```
+16
+```
+
+**提示**
+
+N<=40000 , a、b、k<=10^9 。
+```c++
+
+```
+---
 ## P2569 [SCOI2010]股票交易(单调队列/动态规划)
 
 **题目描述**
