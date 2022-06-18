@@ -177,6 +177,169 @@ int main(){
 }
 ```
 ---
+## P1253 [yLOI2018] 扶苏的问题(线段树)
+
+**题目描述**
+
+给定一个长度为 $n$ 的序列 $a$，要求支持如下三个操作：
+
+1. 给定区间 $[l, r]$，将区间内每个数都修改为 $x$。
+2. 给定区间 $[l, r]$，将区间内每个数都加上 $x$。
+3. 给定区间 $[l, r]$，求区间内的最大值。
+
+**输入格式**
+
+第一行是两个整数，依次表示序列的长度 $n$ 和操作的个数 $q$。  
+第二行有 $n$ 个整数，第 $i$ 个整数表示序列中的第 $i$ 个数 $a_i$。  
+接下来 $q$ 行，每行表示一个操作。每行首先有一个整数 $op$，表示操作的类型。
+- 若 $op = 1$，则接下来有三个整数 $l, r, x$，表示将区间 $[l, r]$ 内的每个数都修改为 $x$。
+- 若 $op = 2$，则接下来有三个整数 $l, r, x$，表示将区间 $[l, r]$ 内的每个数都加上 $x$。
+- 若 $op = 3$，则接下来有两个整数 $l, r$，表示查询区间 $[l, r]$ 内的最大值。
+
+**输出格式**
+
+对于每个 $op = 3$ 的操作，输出一行一个整数表示答案。
+
+**样例 #1**
+
+**样例输入 #1**
+
+```
+6 6
+1 1 4 5 1 4
+1 1 2 6
+2 3 4 2
+3 1 4
+3 2 3
+1 1 6 -1
+3 1 6
+```
+
+**样例输出 #1**
+
+```
+7
+6
+-1
+```
+
+**样例 #2**
+
+**样例输入 #2**
+
+```
+4 4
+10 4 -3 -7
+1 1 3 0
+2 3 4 -4
+1 2 4 -9
+3 1 4
+```
+
+**样例输出 #2**
+
+```
+0
+```
+
+**提示**
+
+**数据规模与约定**
+
+- 对于 $10\%$ 的数据，$n = q = 1$。
+- 对于 $40\%$ 的数据，$n, q \leq 10^3$。
+- 对于 $50\%$ 的数据，$0 \leq a_i, x \leq 10^4$。
+- 对于 $60\%$ 的数据，$op \neq 1$。
+- 对于 $90\%$ 的数据，$n, q \leq 10^5$。
+- 对于 $100\%$ 的数据，$1 \leq n, q \leq 10^6$，$1 \leq l, r \leq n$，$op \in \{1, 2, 3\}$，$|a_i|, |x| \leq 10^9$。
+
+**提示**
+
+请注意大量数据读入对程序效率造成的影响。
+```c++
+#include<cstdio>
+#include<algorithm>
+#define MAXN 1000005
+using namespace std;
+typedef long long ll;
+const ll INF=1e18;
+struct sgtree{
+	ll l,r;
+	ll d1,d2,maxn;
+	#define l(x) tree[x].l
+	#define r(x) tree[x].r
+	#define d1(x) tree[x].d1
+	#define d2(x) tree[x].d2
+	#define maxn(x) tree[x].maxn
+}tree[4*MAXN];
+ll n,m;
+void build(ll x,ll l,ll r){
+	l(x)=l,r(x)=r,d1(x)=INF,d2(x)=0,maxn(x)=-INF;
+	if(l==r) return (void)(scanf("%lld",&maxn(x)));
+	ll mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	maxn(x)=max(maxn(x<<1),maxn(x<<1|1));
+}
+inline void change(ll x,ll k){
+	d2(x)=0; d1(x)=k;
+	maxn(x)=k;
+}
+inline void add(ll x,ll k){
+	d2(x)+=k;
+	maxn(x)+=k;
+}
+inline void pushdown(ll x){
+	if(d1(x)!=INF){
+		change(x<<1,d1(x));
+		change(x<<1|1,d1(x));
+		d1(x)=INF;
+	}
+	if(d2(x)){
+		add(x<<1,d2(x));
+		add(x<<1|1,d2(x));
+		d2(x)=0;
+	}
+}
+inline ll ask(ll x,ll l,ll r){
+	if(l<=l(x)&&r(x)<=r) return maxn(x);
+	pushdown(x); ll ans=-INF;
+	ll mid=(l(x)+r(x))>>1;
+	if(l<=mid) ans=max(ans,ask(x<<1,l,r));
+	if(r>mid) ans=max(ans,ask(x<<1|1,l,r));
+	return ans;
+} 
+inline void modify(ll x,ll l,ll r,ll op,ll k){
+	if(l<=l(x)&&r>=r(x)){
+		if(op==1) change(x,k);
+		else add(x,k);
+		return;
+	}
+	pushdown(x);
+	ll mid=(l(x)+r(x))>>1;
+	if(l<=mid) modify(x<<1,l,r,op,k);
+	if(r>mid) modify(x<<1|1,l,r,op,k);
+	maxn(x)=max(maxn(x<<1),maxn(x<<1|1)); 
+}
+int main(){
+	scanf("%lld%lld",&n,&m);
+	build(1,1,n);
+	while(m--){
+		ll op,l,r; ll k;
+		scanf("%lld%lld%lld",&op,&l,&r);
+		if(op==1){
+			scanf("%lld",&k);
+			modify(1,l,r,1,k);
+		}else if(op==2){
+			scanf("%lld",&k);
+			modify(1,l,r,2,k);
+		}else printf("%lld\n",ask(1,l,r));
+	}
+	return 0;
+}
+```
+---
+
 ## P1314 [NOIP2011 提高组] 聪明的质监员(二分答案/前缀和)
 
 **题目描述**
