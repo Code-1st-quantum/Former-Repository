@@ -652,7 +652,7 @@ Help FJ ensure the cows are getting the correct answer by processing the list an
 
 第1 行: 用空格隔开的两个整数N 和M，n 是灯数
 
-第2..M+1 行: 每行表示一个操作, 有三个用空格分开的整数: 指令号, S\_i 和E\_i
+第2..M+1 行: 每行表示一个操作, 有三个用空格分开的整数: 指令号, $S_i$ 和$E_i$
 
 第1 种指令(用0 表示)包含两个数字$S_i$ 和 $E_i (1 <= S_i <= E_i <= N) $, 它们表示起
 
@@ -688,7 +688,62 @@ Help FJ ensure the cows are getting the correct answer by processing the list an
 
 ![](https://cdn.luogu.com.cn/upload/pic/2448.png)
 ```c++
-
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct sgtree{
+	int l,r,num,d;
+	#define l(x) tree[x].l
+	#define r(x) tree[x].r
+	#define num(x) tree[x].num
+	#define d(x) tree[x].d
+}tree[400005];
+int n,m;
+void build(int x,int l,int r){
+	tree[x].l=l,tree[x].r=r;
+	if(l==r){num(x)=0; return;}
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+}
+void pushdown(int x){
+	d(x<<1)^=1;
+	d(x<<1|1)^=1;
+	num(x<<1)=(r(x<<1)-l(x<<1)+1-num(x<<1));
+	num(x<<1|1)=(r(x<<1|1)-l(x<<1|1)+1-num(x<<1|1));
+	d(x)=0;
+}
+void modify(int x,int l,int r){
+	if(l<=l(x)&&r>=r(x)){
+		d(x)^=1;
+		num(x)=(r(x)-l(x)+1)-num(x);
+		return;
+	}
+	if(d(x)) pushdown(x);
+	int mid=(l(x)+r(x))>>1;
+	if(l<=mid) modify(x<<1,l,r);
+	if(r>mid) modify(x<<1|1,l,r);
+	num(x)=num(x<<1)+num(x<<1|1);
+}
+int ask(int x,int l,int r){
+	if(l<=l(x)&&r>=r(x)) return num(x);
+	if(d(x)) pushdown(x);
+	int ans=0,mid=(l(x)+r(x))>>1;
+	if(l<=mid) ans+=ask(x<<1,l,r);
+	if(r>mid) ans+=ask(x<<1|1,l,r);
+	return ans;
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	build(1,1,n);
+	while(m--){
+		int op,l,r;
+		scanf("%d%d%d",&op,&l,&r);
+		if(op==0) modify(1,l,r);
+		else printf("%d\n",ask(1,l,r));
+	}
+	return 0;
+}
 ```
 ---
 
