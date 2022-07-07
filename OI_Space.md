@@ -267,73 +267,6 @@ int main(){
 }
 ```
 #### 线段树
-##### 线段树 RMQ 方式求 LCA  Getting Lowest Common Ancestor by Using Segment Tree on RMQ
- [洛谷 P3379 【模板】最近公共祖先（LCA）](https://www.luogu.com.cn/problem/P3379)
- ```c++
- #include<iostream>
-#include<cstdio>
-using namespace std;
-struct e{
-	int next,to;
-}edge[1000005];
-int n,m,s,cnt=0,amax=0,a[1000005],b[500005],dp[500005],v[5000005],head[500005];
-void add_edge(int u,int v){
-	edge[++cnt].to=v;
-	edge[cnt].next=head[u];
-	head[u]=cnt;
-}
-inline void solve(){for(int i=1;i<=n;i++) head[i]=-1;}
-void dfs(int u,int fa){
-	a[++amax]=u;
-	b[u]=amax;
-	for(int i=head[u];i!=-1;i=edge[i].next){
-		int v=edge[i].to;
-		if(v==fa) continue;
-		dp[v]=dp[u]+1;
-		dfs(v,u);
-		a[++amax]=u;
-	}
-}
-int cmp(int x,int y){
-	if(dp[x]<dp[y]) return x;
-	else return y;
-}
-void build(int x,int l,int r){
-	if(l==r){v[x]=a[l]; return;}
-	int mid=(l+r)>>1;
-	build(x<<1,l,mid);
-	build(x<<1|1,mid+1,r);
-	v[x]=cmp(v[x<<1],v[x<<1|1]);
-}
-int query(int x,int l,int r,int ql,int qr){
-	if(l==ql&&r==qr) return v[x];
-	int mid=(l+r)>>1;
-	if(ql<=mid&&qr>mid){
-	  return cmp(query(x<<1,l,mid,ql,mid),query(x<<1|1,mid+1,r,mid+1,qr));
-	}
-	else if(qr<=mid){return query(x<<1,l,mid,ql,qr);}
-	else{return query(x<<1|1,mid+1,r,ql,qr);}
-}
-int main(){
-	scanf("%d%d%d",&n,&m,&s);
-	solve();
-	for(int i=1;i<n;i++){
-		int x,y;
-		scanf("%d%d",&x,&y);
-		add_edge(x,y); add_edge(y,x);
-	}
-	dfs(s,0);
-	build(1,1,amax);
-	while(m--){
-		int l,r;
-		scanf("%d%d",&l,&r);
-		if(b[l]>b[r]) swap(l,r);
-		printf("%d\n",query(1,1,amax,b[l],b[r]));
-	}
-	return 0;
-}
- ```
- 
 ##### 线段树之单点修改区间查询 Segment Tree (Modify on Points and Inquiry on Sections) 
 ```c++
 #include<iostream>
@@ -797,6 +730,81 @@ int main(){
 }
 ```
 ##### 欧拉回路求具体方案
+```c++
+
+```
+#### LCA 最近公共祖先
+##### 倍增求 LCA
+```c++
+
+```
+##### 线段树 RMQ 方式求 LCA  Getting Lowest Common Ancestor by Using Segment Tree on RMQ
+ [洛谷 P3379 【模板】最近公共祖先（LCA）](https://www.luogu.com.cn/problem/P3379)
+ ```c++
+ #include<iostream>
+#include<cstdio>
+using namespace std;
+struct e{
+	int next,to;
+}edge[1000005];
+int n,m,s,cnt=0,amax=0,a[1000005],b[500005],dp[500005],v[5000005],head[500005];
+void add_edge(int u,int v){
+	edge[++cnt].to=v;
+	edge[cnt].next=head[u];
+	head[u]=cnt;
+}
+inline void solve(){for(int i=1;i<=n;i++) head[i]=-1;}
+void dfs(int u,int fa){
+	a[++amax]=u;
+	b[u]=amax;
+	for(int i=head[u];i!=-1;i=edge[i].next){
+		int v=edge[i].to;
+		if(v==fa) continue;
+		dp[v]=dp[u]+1;
+		dfs(v,u);
+		a[++amax]=u;
+	}
+}
+int cmp(int x,int y){
+	if(dp[x]<dp[y]) return x;
+	else return y;
+}
+void build(int x,int l,int r){
+	if(l==r){v[x]=a[l]; return;}
+	int mid=(l+r)>>1;
+	build(x<<1,l,mid);
+	build(x<<1|1,mid+1,r);
+	v[x]=cmp(v[x<<1],v[x<<1|1]);
+}
+int query(int x,int l,int r,int ql,int qr){
+	if(l==ql&&r==qr) return v[x];
+	int mid=(l+r)>>1;
+	if(ql<=mid&&qr>mid){
+	  return cmp(query(x<<1,l,mid,ql,mid),query(x<<1|1,mid+1,r,mid+1,qr));
+	}
+	else if(qr<=mid){return query(x<<1,l,mid,ql,qr);}
+	else{return query(x<<1|1,mid+1,r,ql,qr);}
+}
+int main(){
+	scanf("%d%d%d",&n,&m,&s);
+	solve();
+	for(int i=1;i<n;i++){
+		int x,y;
+		scanf("%d%d",&x,&y);
+		add_edge(x,y); add_edge(y,x);
+	}
+	dfs(s,0);
+	build(1,1,amax);
+	while(m--){
+		int l,r;
+		scanf("%d%d",&l,&r);
+		if(b[l]>b[r]) swap(l,r);
+		printf("%d\n",query(1,1,amax,b[l],b[r]));
+	}
+	return 0;
+}
+ ```
+##### Tarjan LCA
 ```c++
 
 ```
