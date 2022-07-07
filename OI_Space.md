@@ -6,9 +6,8 @@
 
 ### 数据结构 Data Structures
 
-#### 字典树
-
-##### Trie 字典树
+#### 字典树 Trie
+##### Trie
  [洛谷 P2580 于是他错误的点名开始了](https://www.luogu.com.cn/problem/P2580)
 ```c++
 #include<iostream>
@@ -64,7 +63,6 @@ int main(){
 }
 
 ```
-
 ##### 01 Trie
  [洛谷 P6018 [Ynoi2010] Fusion tree](https://www.luogu.com.cn/problem/P6018)
 ```c++
@@ -190,7 +188,6 @@ int main(){
 ```
 
 #### 二叉堆 Binary Heap 
-
 ##### 小根二叉堆 Binary Heap 
  [洛谷 P3378 【模板】堆](https://www.luogu.com.cn/problem/P3378)
 ```c++
@@ -239,7 +236,6 @@ int main(){
 ```
 
 #### RMQ 问题 Range Minimum/Maximum Queries 
-
 ##### ST 表
  [洛谷 P3865 【模板】ST 表](https://www.luogu.com.cn/problem/P3865)
 ```c++
@@ -266,6 +262,7 @@ int main(){
 	return 0;
 }
 ```
+
 #### 线段树
 ##### 线段树之单点修改区间查询 Segment Tree (Modify on Points and Inquiry on Sections) 
 ```c++
@@ -348,7 +345,6 @@ int main(){
 	return 0;
 }
 ```
-
 ##### 线段树之区间修改区间查询 Segment Tree (Both Modify and Inquiry on Sections) 
 ```c++
 #include<iostream>
@@ -443,9 +439,7 @@ int main(){
 }
 ```
 #### 同余
-
 ##### 扩展欧拉定理(a ^ b % c 问题，b 为极大数) Extended Euler Theorem
-
  [洛谷 P5091 【模板】扩展欧拉定理](https://www.luogu.com.cn/problem/P5091)
 ```cpp
 #include<cstdio>
@@ -488,7 +482,6 @@ int main(){
 	return 0;
 }
 ```
-
 ##### 中国剩余定理 Chinese Remainder Rheorem CRT
  [洛谷 P1495 【模板】中国剩余定理(CRT)/曹冲养猪](https://www.luogu.com.cn/problem/P1495)
 ```cpp
@@ -518,7 +511,6 @@ int main(){
 	return 0;
 }
 ```
-
 ##### 扩展中国剩余定理 Extended Chinese Remainder Theorem
  [洛谷 P4777 【模板】扩展中国剩余定理（EXCRT）](https://www.luogu.com.cn/problem/P4777)
  ```cpp
@@ -556,8 +548,7 @@ int main(){
 	return 0;
 }
  ```
- 
-##### 扩展欧几里得算法及其通解 Extended Euclidean Algorithm
+ ##### 扩展欧几里得算法及其通解 Extended Euclidean Algorithm
  [洛谷 P5656 【模板】二元一次不定方程 (exgcd)）](https://www.luogu.com.cn/problem/P5656)
  ```cpp
  #include<cstdio>
@@ -597,8 +588,7 @@ int main(){
 	return 0;
 }
  ```
- 
-##### 线性同余方程 Linear Congruent Equation
+ ##### 线性同余方程 Linear Congruent Equation
 [洛谷 P1082 [NOIP2012 提高组] 同余方程](https://www.luogu.com.cn/problem/P1082)
 ```cpp
 #include<cstdio>
@@ -619,7 +609,6 @@ int main(){
 	return 0;
 }
 ```
-
 ##### 线性求乘法逆元 Linear Multiplicative Inverse
 [洛谷 P3811 【模板】乘法逆元](https://www.luogu.com.cn/problem/P3811)
 ```cpp
@@ -638,6 +627,7 @@ int main(){
     return 0;
 }
 ```
+
 ### 约数
 ##### 线性筛求欧拉函数 Getting Euler Function By Sieve Method
 [洛谷 P4139 上帝与集合的正确用法](https://www.luogu.com.cn/problem/P4139)
@@ -692,6 +682,7 @@ int main(){
 ```
 
 ### 图论
+
 #### 欧拉路问题
 ##### 未拼接的欧拉回路具体方案
 ```c++
@@ -810,6 +801,7 @@ int main(){
 ```
 
 ### 其他
+
 #### 龟速乘
 若模数>1e9时，快速幂会爆掉，要使用龟速乘
 ```c++
