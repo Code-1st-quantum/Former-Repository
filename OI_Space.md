@@ -757,6 +757,50 @@ int main(){
 	return 0;
 }
 ```
+
+### 图论
+#### 欧拉路问题
+##### 未拼接的欧拉回路具体方案
+```c++
+#include<cstdio>
+using namespace std;
+struct e{
+	int to,next;
+}edge[20005];
+bool vis[20005];
+int n,m,cnt=1,head[10005],top=0,stack[10005];
+void add_edge(int u,int v){
+	edge[++cnt].to=v;
+	edge[cnt].next=head[u];
+	vis[cnt]=false;
+	head[u]=cnt;
+}
+void dfs(int x){
+	for(int i=head[x];i;i=edge[i].next)
+		if(!vis[i]){
+			int v=edge[i].to;
+			vis[i]=vis[i^1]=true;
+			dfs(v);
+			stack[++top]=v;
+		}
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=1;i<=m;i++){
+		int u,v; scanf("%d%d",&u,&v);
+		add_edge(u,v);
+		add_edge(v,u);
+	}
+	dfs(1);
+	for(int i=top;i>0;i--) printf("%d ",stack[i]);
+	return 0;
+}
+```
+##### 欧拉回路求具体方案
+```c++
+
+```
+
 ### 其他
 #### 龟速乘
 若模数>1e9时，快速幂会爆掉，要使用龟速乘
