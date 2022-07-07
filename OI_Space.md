@@ -723,7 +723,45 @@ int main(){
 ```
 ##### 欧拉回路求具体方案
 ```c++
-
+#include<cstdio>
+using namespace std;
+struct e{
+	int to,next;
+}edge[200005];
+bool vis[200005];
+int n,m,cnt,ans[200005],tot=0,head[200005],top=0,stack[200005];
+void add_edge(int u,int v){
+	edge[++cnt].to=v;
+	edge[cnt].next=head[u];
+	vis[cnt]=false;
+	head[u]=cnt;
+}
+void euler(){
+	stack[++top]=1;
+	while(top>0){
+		int x=stack[top],i=head[x];
+		while(i&&vis[i]) i=edge[i].next;
+		if(i){
+			stack[++top]=edge[i].to;
+			vis[i]=vis[i^1]=true;
+			head[x]=edge[i].next;
+		}else{
+			top--;
+			ans[++tot]=x;
+		}
+	}
+}
+int main(){
+	scanf("%d%d",&n,&m); cnt=1;
+	for(int i=1;i<=m;i++){
+		int u,v; scanf("%d%d",&u,&v);
+		add_edge(u,v);
+		add_edge(v,u);
+	}
+	euler();
+	for(int i=tot;i;i--) printf("%d ",ans[i]);
+	return 0;
+}
 ```
 #### LCA 最近公共祖先
 ##### 倍增求 LCA
