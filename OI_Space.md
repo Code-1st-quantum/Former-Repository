@@ -685,7 +685,7 @@ int main(){
 
 #### 欧拉路问题
 ##### 未拼接的欧拉回路具体方案
-注:不常用
+注 : 不常用
 ```c++
 #include<cstdio>
 using namespace std;
