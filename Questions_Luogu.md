@@ -1024,7 +1024,7 @@ int main(){
 ```
 ---
 
-## [USACO08MAR]Cow Jogging G(A*/k短路)
+## P2901 [USACO08MAR]Cow Jogging G(A*/k短路)
 
 **题目描述**
 
