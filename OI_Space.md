@@ -236,7 +236,7 @@ int main(){
 ```
 
 #### RMQ 问题 Range Minimum/Maximum Queries 
-##### ST 表
+##### ST 表 Sparse Table
  [洛谷 P3865 【模板】ST 表](https://www.luogu.com.cn/problem/P3865)
 ```c++
 #include<iostream>
@@ -263,7 +263,7 @@ int main(){
 }
 ```
 
-#### 线段树
+#### 线段树 Segment Tree
 ##### 线段树之单点修改区间查询 Segment Tree (Modify on Points and Inquiry on Sections) 
 ```c++
 #include<iostream>
@@ -304,7 +304,7 @@ int main(){
 	return 0;
 }
 ```
-##### 线段树之区间修改单点查询(省空间版) 
+##### 线段树之区间修改单点查询(省空间版) Segment Tree (Modify on Sections and Inquiry on Points(Save Memories))
  [洛谷 P4939 Agent2](https://www.luogu.com.cn/problem/P4939)
 ```c++
 #include<cstdio>
@@ -411,7 +411,7 @@ int main(){
 
 ### 数论 Number Theory
 
-#### 素数筛法/素数判断
+#### 素数筛法/素数判断 Prime Sieve/Prime Judgement
 ##### (素数)线性筛 Linear Sieve Method
  [洛谷 P3383 【模板】线性筛素数](https://www.luogu.com.cn/problem/P3383)
  ```cpp
@@ -438,7 +438,7 @@ int main(){
 	return 0;
 }
 ```
-#### 同余
+#### 同余 Congruence
 ##### 扩展欧拉定理(a ^ b % c 问题，b 为极大数) Extended Euler Theorem
  [洛谷 P5091 【模板】扩展欧拉定理](https://www.luogu.com.cn/problem/P5091)
 ```cpp
@@ -628,7 +628,7 @@ int main(){
 }
 ```
 
-### 约数
+### 约数 Divisor
 ##### 线性筛求欧拉函数 Getting Euler Function By Sieve Method
 [洛谷 P4139 上帝与集合的正确用法](https://www.luogu.com.cn/problem/P4139)
 ```cpp
@@ -681,10 +681,10 @@ int main(){
 }
 ```
 
-### 图论
+### 图论 Graph Theory
 
-#### 欧拉路问题
-##### 未拼接的欧拉回路具体方案
+#### 欧拉路问题 Euler Path
+##### 未拼接的欧拉回路具体方案 Get Path on Unspliced Euler Loop
 注 : 不常用
 ```c++
 #include<cstdio>
@@ -721,7 +721,7 @@ int main(){
 	return 0;
 }
 ```
-##### 欧拉回路求具体方案
+##### 欧拉回路求具体方案 Get Path on Euler Loop
 ```c++
 #include<cstdio>
 using namespace std;
@@ -763,8 +763,9 @@ int main(){
 	return 0;
 }
 ```
-#### LCA 最近公共祖先
-##### 倍增求 LCA
+
+#### LCA 最近公共祖先 Lowest Common Ancestors
+##### 倍增求LCA  Getting LCA by Multiplication
 ```c++
 
 ```
@@ -834,14 +835,92 @@ int main(){
 	return 0;
 }
  ```
-##### Tarjan LCA
+##### Getting LCA by *Tarjan*
 ```c++
 
 ```
 
-### 其他
+#### K 短路 K-th Shortest Path
+##### A* 求 K 短路 Getting K-th Shortest Path by A-Star Algorithm
+ [洛谷 P2901 [USACO08MAR]Cow Jogging G](https://www.luogu.com.cn/problem/P2901)
+```c++
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+using namespace std;
+struct e{
+	int to,next,w;
+}edge[2][20005];
+struct node{
+	int x,dis;
+	bool operator <(const node &_node)const{return _node.dis<dis;}
+};
+bool vis[10005]={false};
+int dis[10005],n,m,k,cnt[2],head[2][10005],sum=0,ans[105];
+struct star{
+	int u,val;
+	bool operator <(const star &_star)const{return _star.val+dis[_star.u]<val+dis[u];}
+};
+void add_edge(int op,int u,int v,int w){
+	edge[op][++cnt[op]].to=v;
+	edge[op][cnt[op]].next=head[op][u];
+	edge[op][cnt[op]].w=w;
+	head[op][u]=cnt[op];
+}
+void dijkstra(){
+	priority_queue<node>q;
+	memset(dis,0x3f,sizeof dis);
+	dis[1]=0;
+	q.push((node){1,0});
+	while(!q.empty()){
+		int u=q.top().x; q.pop();
+		if(vis[u]) continue;
+		vis[u]=true;
+		for(int i=head[1][u];i;i=edge[1][i].next){
+			int v=edge[1][i].to,w=edge[1][i].w;
+			if(dis[u]+w<dis[v]){
+				dis[v]=dis[u]+w;
+				q.push((node){v,dis[v]});
+			}
+		}
+	}
+}
+void A_star(){
+	priority_queue<star>q;
+	q.push((star){n,0});
+	while(!q.empty()){
+		int u=q.top().u,val=q.top().val; q.pop();
+		if(u==1){
+			ans[++sum]=val;
+			if(sum==k) return;
+			continue;
+		}
+		for(int i=head[0][u];i;i=edge[0][i].next){
+			int v=edge[0][i].to,w=edge[0][i].w;
+			q.push((star){v,val+w});
+		}
+	}
+}
+int main(){
+	scanf("%d%d%d",&n,&m,&k);
+	for(int i=1;i<=m;i++){
+		int u,v,w;
+		scanf("%d%d%d",&u,&v,&w);
+		add_edge(0,u,v,w);
+		add_edge(1,v,u,w);
+	}
+	dijkstra();
+	A_star();
+	for(int i=1;i<=sum;i++) printf("%d\n",ans[i]);
+	for(int i=sum+1;i<=k;i++) puts("-1");
+	return 0;
+}
+````
 
-#### 龟速乘
+### 其他 Other Algorithms
+
+#### 龟速乘 Turtle Speeded Exponentiation
 若模数>1e9时，快速幂会爆掉，要使用龟速乘
 ```c++
 typedef long long ll;
