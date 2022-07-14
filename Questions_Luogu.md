@@ -1084,7 +1084,78 @@ int main(){
 
 对于全部的测试点，保证 $1 \le N \le 1,000$，$1 \le M \le 1\times10^4$，$1 \le K \le 100$，$1 \le Y_i < X_i\le N$，$1 \le D_i \le 1\times 10^6$，
 ```c++
-
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+using namespace std;
+struct e{
+	int to,next,w;
+}edge[2][20005];
+struct node{
+	int x,dis;
+	bool operator <(const node &_node)const{return _node.dis<dis;}
+};
+bool vis[10005]={false};
+int dis[10005],n,m,k,cnt[2],head[2][10005],sum=0,ans[105];
+struct star{
+	int u,val;
+	bool operator <(const star &_star)const{return _star.val+dis[_star.u]<val+dis[u];}
+};
+void add_edge(int op,int u,int v,int w){
+	edge[op][++cnt[op]].to=v;
+	edge[op][cnt[op]].next=head[op][u];
+	edge[op][cnt[op]].w=w;
+	head[op][u]=cnt[op];
+}
+void dijkstra(){
+	priority_queue<node>q;
+	memset(dis,0x3f,sizeof dis);
+	dis[1]=0;
+	q.push((node){1,0});
+	while(!q.empty()){
+		int u=q.top().x; q.pop();
+		if(vis[u]) continue;
+		vis[u]=true;
+		for(int i=head[1][u];i;i=edge[1][i].next){
+			int v=edge[1][i].to,w=edge[1][i].w;
+			if(dis[u]+w<dis[v]){
+				dis[v]=dis[u]+w;
+				q.push((node){v,dis[v]});
+			}
+		}
+	}
+}
+void A_star(){
+	priority_queue<star>q;
+	q.push((star){n,0});
+	while(!q.empty()){
+		int u=q.top().u,val=q.top().val; q.pop();
+		if(u==1){
+			ans[++sum]=val;
+			if(sum==k) return;
+			continue;
+		}
+		for(int i=head[0][u];i;i=edge[0][i].next){
+			int v=edge[0][i].to,w=edge[0][i].w;
+			q.push((star){v,val+w});
+		}
+	}
+}
+int main(){
+	scanf("%d%d%d",&n,&m,&k);
+	for(int i=1;i<=m;i++){
+		int u,v,w;
+		scanf("%d%d%d",&u,&v,&w);
+		add_edge(0,u,v,w);
+		add_edge(1,v,u,w);
+	}
+	dijkstra();
+	A_star();
+	for(int i=1;i<=sum;i++) printf("%d\n",ans[i]);
+	for(int i=sum+1;i<=k;i++) puts("-1");
+	return 0;
+}
 ```
 ---
 
