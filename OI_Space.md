@@ -409,6 +409,134 @@ int main(){
 }
 ```
 
+#### 平衡树
+##### Treap
+ [洛谷 P3369 【模板】普通平衡树](https://www.luogu.com.cn/problem/P3369)
+```cpp
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+#include<cstring>
+#include<cstdlib>
+#define N 400005 
+#define int long long 
+using namespace std;
+struct treap{int l,r,size,dat,cnt,val;}a[N];
+int n,m,op,x,tot=0,rt;
+void update(int x){a[x].size=a[a[x].l].size+a[a[x].r].size+a[x].cnt;}
+int make_node(int val){a[++tot].size=1;a[tot].cnt=1;a[tot].val=val;a[tot].dat=rand();return tot;}
+void build(){make_node(-1e9);make_node(1e9);rt=1;a[1].r=2;update(rt);}
+void zig(int &p){int q=a[p].l; a[p].l=a[q].r; a[q].r=p; p=q; update(a[p].r); update(p);}
+void zag(int &p){int q=a[p].r; a[p].r=a[q].l; a[q].l=p; p=q; update(a[p].l); update(p);}
+void insert(int &p,int val){
+	if(p==0){p=make_node(val);return;}
+	if(val==a[p].val){a[p].cnt++; update(p); return;}
+	if(val<a[p].val){insert(a[p].l,val); if(a[p].dat<a[a[p].l].dat) zig(p);}
+	else{insert(a[p].r,val); if(a[p].dat<a[a[p].r].dat) zag(p);} update(p);
+}
+int getrank(int p,int val){
+	if(!p) return 1; 
+	if(val==a[p].val) return a[a[p].l].size+1;
+	if(val<a[p].val) return getrank(a[p].l,val);
+	return a[a[p].l].size+a[p].cnt+getrank(a[p].r,val);
+}
+int getval(int p,int rank){
+	if(!p) return 1e18; 
+	if(rank<=a[a[p].l].size) return getval(a[p].l,rank);
+	if(rank<=a[a[p].l].size+a[p].cnt) return a[p].val;
+	return getval(a[p].r,rank-a[a[p].l].size-a[p].cnt);
+}
+void remove(int &p,int val){
+	if(!p) return;
+	if(val==a[p].val){
+		if(a[p].cnt>1){a[p].cnt--;update(p);return;}
+		if(a[p].l||a[p].r){
+			if((!a[p].r)||a[a[p].l].dat>a[a[p].r].dat) zig(p),remove(a[p].r,val);
+			else zag(p),remove(a[p].l,val); 
+			update(p);
+		}else p=0; return;
+	}
+	if(val<a[p].val) remove(a[p].l,val); else remove(a[p].r,val);
+	update(p);
+}
+int getnext(int val){
+	int ans=2,p=rt;
+	while(p){
+		if(a[p].val==val){if(a[p].r>0){p=a[p].r; while(a[p].l>0)p=a[p].l; ans=p;} break;}
+		if(a[p].val>val&&a[p].val<a[ans].val) ans=p;
+		if(val<a[p].val) p=a[p].l; else p=a[p].r;
+	}return a[ans].val;
+}
+int getpre(int val){
+	int ans=1,p=rt;
+	while(p){
+		if(a[p].val==val){if(a[p].l>0){p=a[p].l; while(a[p].r>0)p=a[p].r; ans=p;} break;}
+		if(a[p].val<val&&a[p].val>a[ans].val) ans=p;
+		if(val<a[p].val) p=a[p].l; else p=a[p].r;
+	}return a[ans].val;
+}
+signed main(){
+	scanf("%lld",&n); build();
+	for(int i=1;i<=n;i++){
+		scanf("%lld%lld",&op,&x);
+		switch (op){
+			case 1:{insert(rt,x);break;}
+			case 2:{remove(rt,x);break;}
+			case 3:{printf("%lld\n",getrank(rt,x)-1);break;}
+			case 4:{printf("%lld\n",getval(rt,x+1));break;}
+			case 5:{printf("%lld\n",getpre(x));break;}
+			case 6:{printf("%lld\n",getnext(x));break;}
+		}
+	}
+	return 0;
+}
+```
+##### FHQ-Treap
+[洛谷 P3369 【模板】普通平衡树](https://www.luogu.com.cn/problem/P3369)
+```cpp
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<cstdlib>
+#define N 200005
+using namespace std;
+struct fhq_treap{int l,r,val,size,dat;}a[N];
+int n,op,x,tot=0,rt=0;
+void make_node(int val){a[++tot].val=val;a[tot].size=1;a[tot].dat=rand();a[tot].l=a[tot].r=0;}
+void update(int p){a[p].size=a[a[p].l].size+a[a[p].r].size+1;}
+void split(int p,int val,int &l,int &r){
+	if(!p){l=r=0;return;}
+	if(a[p].val<=val){l=p;split(a[p].r,val,a[p].r,r);}
+	else{r=p;split(a[p].l,val,l,a[p].l);} update(p);
+}
+int merge(int l,int r){
+	if((!l)||(!r)) return l+r;
+	if(a[l].dat<a[r].dat){a[l].r=merge(a[l].r,r); update(l); return l;}
+	else{a[r].l=merge(l,a[r].l); update(r); return r;}
+}
+int getval(int p,int rank){
+	if(!p) return 1;
+	if(a[a[p].l].size>=rank) return getval(a[p].l,rank);
+	if(a[a[p].l].size+1>=rank) return a[p].val;
+	return getval(a[p].r,rank-a[a[p].l].size-1);
+}
+int main(){
+	scanf("%d",&n); int l,r,now;
+	for(int i=1;i<=n;i++){
+		scanf("%d%d",&op,&x);
+		if(op==1){split(rt,x,l,r); make_node(x); rt=merge(merge(l,tot),r);}
+		else if(op==2){split(rt,x,l,r); split(l,x-1,l,now); now=merge(a[now].l,a[now].r); rt=merge(merge(l,now),r);}
+		else if(op==3){split(rt,x-1,l,r); printf("%d\n",a[l].size+1); rt=merge(l,r);}
+		else if(op==4){printf("%d\n",getval(rt,x));}
+		else if(op==5){split(rt,x-1,l,r); printf("%d\n",getval(l,a[l].size)); rt=merge(l,r);}
+		else{split(rt,x,l,r); printf("%d\n",getval(r,1)); rt=merge(l,r);
+		}
+	}
+	return 0;
+}
+```
+
 ### 数论 Number Theory
 
 #### 素数筛法/素数判断 Prime Sieve/Prime Judgement
