@@ -530,8 +530,7 @@ int main(){
 		else if(op==3){split(rt,x-1,l,r); printf("%d\n",a[l].size+1); rt=merge(l,r);}
 		else if(op==4){printf("%d\n",getval(rt,x));}
 		else if(op==5){split(rt,x-1,l,r); printf("%d\n",getval(l,a[l].size)); rt=merge(l,r);}
-		else{split(rt,x,l,r); printf("%d\n",getval(r,1)); rt=merge(l,r);
-		}
+		else{split(rt,x,l,r); printf("%d\n",getval(r,1)); rt=merge(l,r);}
 	}
 	return 0;
 }
