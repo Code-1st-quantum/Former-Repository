@@ -535,6 +535,80 @@ int main(){
 	return 0;
 }
 ```
+##### Splay 区间翻转
+```
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#define N 100100
+using namespace std;
+struct splaytree{
+	int s[2],size,val,fa,flag;
+	void init(int VAL,int FA){val=VAL; fa=FA; size=1;}
+}tree[N];
+int n,m,rt,l,r,idx=0;
+void pushdown(int x){
+	if(tree[x].flag){
+		swap(tree[x].s[0],tree[x].s[1]);
+		tree[tree[x].s[0]].flag^=1; tree[tree[x].s[1]].flag^=1;
+		tree[x].flag=0;
+	}
+}
+void pushup(int x){tree[x].size=tree[tree[x].s[0]].size+tree[tree[x].s[1]].size+1;}
+void output(int x){
+	pushdown(x);
+	if(tree[x].s[0]) output(tree[x].s[0]);
+	if(tree[x].val>=1&&tree[x].val<=n) printf("%d ",tree[x].val);
+	if(tree[x].s[1]) output(tree[x].s[1]);
+}
+void rotate(int x){
+	int y=tree[x].fa,z=tree[y].fa;
+	int k=(tree[y].s[1]==x);
+	tree[z].s[tree[z].s[1]==y]=x; tree[x].fa=z;
+	tree[y].s[k]=tree[x].s[k^1]; tree[tree[x].s[k^1]].fa=y;
+	tree[x].s[k^1]=y; tree[y].fa=x;
+	pushup(x),pushup(y);
+}
+void splay(int x,int k){
+	while(tree[x].fa!=k){
+		int y=tree[x].fa,z=tree[y].fa;
+		if(z!=k)
+		  if((tree[z].s[1]==y)^(tree[y].s[1]==x)) rotate(x);
+		  else rotate(y);
+		rotate(x);
+	}if(!k) rt=x;
+}
+void insert(int x){
+	int u=rt,fa=0;
+	while(u){fa=u;u=tree[u].s[x>tree[u].val];}
+	u=++idx;
+	if(fa) tree[fa].s[x>tree[fa].val]=u;
+	tree[u].init(x,fa);
+	splay(u,0);
+}
+int getval(int rank){
+	int u=rt;
+	while(true){
+		pushdown(u);
+		if(tree[tree[u].s[0]].size>=rank) u=tree[u].s[0];
+		else if(tree[tree[u].s[0]].size+1==rank) return u;
+		else rank-=(tree[tree[u].s[0]].size+1),u=tree[u].s[1];
+	}
+	return -1;
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=0;i<=n+1;i++) insert(i);
+	for(int i=1;i<=m;i++){
+		scanf("%d%d",&l,&r);
+		l=getval(l),r=getval(r+2);
+		splay(l,0); splay(r,l);
+		tree[tree[r].s[0]].flag^=1;
+	}
+	output(rt);
+	return 0;
+}
+```
 
 ### 数论 Number Theory
 
