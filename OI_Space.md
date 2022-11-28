@@ -536,7 +536,8 @@ int main(){
 }
 ```
 ##### Splay 区间翻转
-```
+[洛谷 P3391 【模板】文艺平衡树](https://www.luogu.com.cn/problem/P3391)
+```cpp
 #include<cstdio>
 #include<iostream>
 #include<algorithm>
